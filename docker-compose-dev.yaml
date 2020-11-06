@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: db
+    image: mysql:8.0
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: orlik
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_password
+    networks:
+      - db
+
+  php:
+    container_name: php
+    build:
+      context: ./
+      dockerfile: .docker/php/Dockerfile
+    volumes:
+      - ./:/var/www/symfony:cached
+    depends_on:
+      - db
+    networks:
+      - db
+      - php
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./
+      dockerfile: .docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - php
+    networks:
+      - php
+    volumes:
+      - ./var/log/nginx:/var/log/nginx:cached
+
+networks:
+  db:
+  php:
