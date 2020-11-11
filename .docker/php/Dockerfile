@@ -10,6 +10,8 @@ RUN apk add --update \
     libxml2-dev \
     autoconf
 
+RUN docker-php-ext-install pdo pdo_mysql
+
 COPY ./build/php/symfony.ini /etc/php7/conf.d/
 COPY ./build/php/symfony.ini /etc/php7/cli/conf.d/
 COPY ./build/php/xdebug.ini  /etc/php7/conf.d/
