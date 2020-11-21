@@ -27,6 +27,10 @@ class Facility
      */
     private $address;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $pitchTypes = [];
 
 
     public function getId(): ?int
@@ -54,6 +58,18 @@ class Facility
     public function setAddress(string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPitchTypes(): ?array
+    {
+        return $this->pitchTypes;
+    }
+
+    public function setPitchTypes(array $pitchTypes): self
+    {
+        $this->pitchTypes = $pitchTypes;
 
         return $this;
     }

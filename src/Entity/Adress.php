@@ -10,16 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Adress
 {
-//    /**
-//     * @ORM\Id
-//     * @ORM\GeneratedValue
-//     * @ORM\Column(type="integer")
-//     */
-//    private $id;
-//
-//    /**
-//     * @ORM\Column(type="string", length=255)
-//     */
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $street;
 
     /**
@@ -48,10 +48,10 @@ class Adress
     }
 
 
-//    public function getId(): ?int
-//    {
-//        return $this->id;
-//    }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getStreet(): ?string
     {
