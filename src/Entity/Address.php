@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=AdressRepository::class)
  */
-class Adress
+class Address
 {
     /**
      * @ORM\Id
@@ -36,6 +36,11 @@ class Adress
      * @ORM\Column(type="string", length=255)
      */
     private $postCode;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Facility::class, mappedBy="address", cascade={"persist", "remove"})
+     */
+    private $facility;
 
 
     public function __construct(string $street, string $streetNumber, string $city, string $postCode)
@@ -97,6 +102,23 @@ class Adress
     public function setPostCode(string $postCode): self
     {
         $this->postCode = $postCode;
+
+        return $this;
+    }
+
+    public function getFacility(): ?Facility
+    {
+        return $this->facility;
+    }
+
+    public function setFacility(Facility $facility): self
+    {
+        $this->facility = $facility;
+
+        // set the owning side of the relation if necessary
+        if ($facility->getAddress() !== $this) {
+            $facility->setAddress($this);
+        }
 
         return $this;
     }

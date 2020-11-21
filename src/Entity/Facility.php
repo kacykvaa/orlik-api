@@ -23,15 +23,15 @@ class Facility
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $address;
-
-    /**
      * @ORM\Column(type="array")
      */
     private $pitchTypes = [];
 
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, inversedBy="facility", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $address;
 
     public function getId(): ?int
     {
@@ -50,18 +50,6 @@ class Facility
         return $this;
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
     public function getPitchTypes(): ?array
     {
         return $this->pitchTypes;
@@ -70,6 +58,18 @@ class Facility
     public function setPitchTypes(array $pitchTypes): self
     {
         $this->pitchTypes = $pitchTypes;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
