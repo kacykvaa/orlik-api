@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Adress;
+use App\Entity\Address;
 use App\Entity\Facility;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +22,7 @@ class CreateFacilityAction extends AbstractController
         $orlik1 = new Facility();
         $orlik1->setName("arena");
         $address = new ArrayCollection();
-        $address->add(new Adress("miła", "17", "pruszków", "12-123"));
+        $address->add(new Address("miła", "17", "pruszków", "12-123"));
         $orlik1->setAddress($address);
         $orlik1->setPitchTypes(["Football", "Volleyball", "Basketball"]);
 
