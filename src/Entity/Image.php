@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ImagesRepository;
+use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=ImagesRepository::class)
+ * @ORM\Entity(repositoryClass=ImageRepository::class)
  */
-class Images
+class Image
 {
     /**
      * @ORM\Id
@@ -29,7 +29,7 @@ class Images
     private $path;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Facility::class, inversedBy="images")
+     * @ORM\ManyToOne(targetEntity=Facility::class, inversedBy="image")
      */
 
     private $facility;

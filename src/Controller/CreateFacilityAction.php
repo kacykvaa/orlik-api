@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\Facility;
-use App\Entity\Images;
+use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,7 +30,7 @@ class CreateFacilityAction extends AbstractController
         $orlik1->setName("szkoła");
         $orlik1->setAddress(new Address('miła', '12','krakow', '12-521'));
         $orlik1->setPitchTypes(["Football", "Volleyball", "Basketball"]);
-        $orlik1->addImage(new Images('image', 'app/folder'));
+        $orlik1->addImage(new Image('image', 'app/folder'));
 
 
         $jsonContent= $serializer->serialize($orlik1, 'json', [
@@ -41,7 +41,7 @@ class CreateFacilityAction extends AbstractController
         $em->persist($orlik1);
         $em->flush();
 
-        return new JsonResponse('Saved Facility: '.$jsonContent);
+        return new JsonResponse($jsonContent, '201');
 
     }
 }

@@ -37,14 +37,14 @@ class Facility
     private $address;
 
     /**
-     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="facility", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="facility", cascade={"persist"})
      */
-    private $images;
+    private $image;
 
 
     public function __construct()
     {
-        $this->images = new ArrayCollection();
+        $this->image = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,27 +89,27 @@ class Facility
     }
 
     /**
-     * @return Collection|Images[]
+     * @return Collection|Image[]
      */
-    public function getImages(): Collection
+    public function getImage(): Collection
     {
-        return $this->images;
+        return $this->image;
     }
 
 
-    public function addImage(Images $image): self
+    public function addImage(Image $image): self
     {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
+        if (!$this->image->contains($image)) {
+            $this->image[] = $image;
             $image->setFacility($this);
         }
 
         return $this;
     }
 
-    public function removeImage(Images $image): self
+    public function removeImage(Image $image): self
     {
-        if ($this->images->removeElement($image)) {
+        if ($this->image->removeElement($image)) {
             // set the owning side to null (unless already changed)
             if ($image->getFacility() === $this) {
                 $image->setFacility(null);
