@@ -4,29 +4,43 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\Facility;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Images;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * @method saveEntities(array $array)
+ */
 class CreateFacilityAction extends AbstractController
 {
     /**
      * @Route("/api/create/facility", name="create_facility")
+     * @param EntityManagerInterface $em
      * @param SerializerInterface $serializer
-     * @return JsonResponse
+     * @return Response
      */
-    public function __invoke(SerializerInterface $serializer)
+    public function __invoke(EntityManagerInterface $em, SerializerInterface $serializer)
     {
         $orlik1 = new Facility();
-        $orlik1->setName("arena");
-        $address = new ArrayCollection();
-        $address->add(new Address("miła", "17", "pruszków", "12-123"));
-        $orlik1->setAddress($address);
+        $orlik1->setName("szkoła");
+        $orlik1->setAddress(new Address('miła', '12','krakow', '12-521'));
         $orlik1->setPitchTypes(["Football", "Volleyball", "Basketball"]);
+        $orlik1->addImage(new Images('image', 'app/folder'));
 
-        $jsonContent= $serializer->serialize($orlik1, 'json');
+
+        $jsonContent= $serializer->serialize($orlik1, 'json', [
+            ObjectNormalizer::CIRCULAR_REFERENCE_HANDLER => function($object){
+                return $object->getId();
+            }
+        ]);
+        $em->persist($orlik1);
+        $em->flush();
+
         return new JsonResponse('Saved Facility: '.$jsonContent);
 
     }
