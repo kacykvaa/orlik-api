@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImageRepository::class)
@@ -16,23 +15,23 @@ class Image
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private  $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $filename;
+    private string $filename;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $path;
+    private string $path;
 
     /**
      * @ORM\ManyToOne(targetEntity=Facility::class, inversedBy="image")
      */
 
-    private $facility;
+    private Facility $facility;
 
     public function __construct(string $filename, string $path)
     {
@@ -71,12 +70,12 @@ class Image
         return $this;
     }
 
-    public function getFacility(): ?Facility
+    public function getFacility(): Facility
     {
         return $this->facility;
     }
 
-    public function setFacility(?Facility $facility): self
+    public function setFacility(Facility $facility): self
     {
         $this->facility = $facility;
 

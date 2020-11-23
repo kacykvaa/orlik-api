@@ -26,22 +26,18 @@ class CreateFacilityAction extends AbstractController
      */
     public function __invoke(EntityManagerInterface $em, SerializerInterface $serializer)
     {
-        $orlik1 = new Facility();
-        $orlik1->setName("szkoła");
-        $orlik1->setAddress(new Address('miła', '12','krakow', '12-521'));
-        $orlik1->setPitchTypes(["Football", "Volleyball", "Basketball"]);
-        $orlik1->addImage(new Image('image', 'app/folder'));
+        $facility = new Facility('Gimnazjum',['Football', 'Basketball'],
+        new Address('orla', '12','pris','12120'));
+        $facility->addImage(new Image('image', 'app/folder'));
 
 
-        $jsonContent= $serializer->serialize($orlik1, 'json', [
+        $jsonContent= $serializer->serialize($facility, 'json', [
             ObjectNormalizer::CIRCULAR_REFERENCE_HANDLER => function($object){
                 return $object->getId();
             }
         ]);
-        $em->persist($orlik1);
+        $em->persist($facility);
         $em->flush();
-
-        return new JsonResponse($jsonContent, '201');
-
+        return new JsonResponse($jsonContent);
     }
 }

@@ -6,7 +6,6 @@ use App\Repository\FacilityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FacilityRepository::class)
@@ -18,33 +17,37 @@ class Facility
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private  $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="array")
      */
-    private $pitchTypes = [];
+    private array $pitchTypes;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, inversedBy="facility", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+
      */
-    private $address;
+    private  $address;
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="facility", cascade={"persist"})
      */
-    private $image;
+    private $images;
 
 
-    public function __construct()
+    public function __construct(string $name, array $pitchTypes,  $address)
     {
-        $this->image = new ArrayCollection();
+        $this->name = $name;
+        $this->pitchTypes = $pitchTypes;
+        $this->address = $address;
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,35 +60,16 @@ class Facility
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     public function getPitchTypes(): ?array
     {
         return $this->pitchTypes;
     }
 
-    public function setPitchTypes(array $pitchTypes): self
-    {
-        $this->pitchTypes = $pitchTypes;
-
-        return $this;
-    }
 
     public function getAddress(): ?Address
     {
         return $this->address;
-    }
-
-    public function setAddress(Address $address): self
-    {
-        $this->address = $address;
-
-        return $this;
     }
 
     /**
@@ -93,14 +77,24 @@ class Facility
      */
     public function getImage(): Collection
     {
-        return $this->image;
+        return $this->images;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->address->contains($address)) {
+            $this->address = $address;
+            $address->setFacility($this);
+        }
+
+        return $this;
     }
 
 
     public function addImage(Image $image): self
     {
-        if (!$this->image->contains($image)) {
-            $this->image[] = $image;
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
             $image->setFacility($this);
         }
 
@@ -109,7 +103,7 @@ class Facility
 
     public function removeImage(Image $image): self
     {
-        if ($this->image->removeElement($image)) {
+        if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
             if ($image->getFacility() === $this) {
                 $image->setFacility(null);
@@ -118,5 +112,4 @@ class Facility
 
         return $this;
     }
-
 }
