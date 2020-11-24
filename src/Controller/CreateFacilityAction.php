@@ -38,6 +38,6 @@ class CreateFacilityAction extends AbstractController
         ]);
         $em->persist($facility);
         $em->flush();
-        return new JsonResponse($jsonContent);
+        return new JsonResponse($jsonContent, 201);
     }
 }

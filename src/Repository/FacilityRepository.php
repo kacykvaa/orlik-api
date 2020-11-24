@@ -19,10 +19,10 @@ class FacilityRepository extends ServiceEntityRepository
         parent::__construct($registry, Facility::class);
     }
 
-    // /**
-    //  * @return Facility[] Returns an array of Facility objects
-    //  */
-    /*
+     /**
+      * @return Facility[]
+      */
+
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('f')
@@ -34,9 +34,9 @@ class FacilityRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
 
-    /*
+
+
     public function findOneBySomeField($value): ?Facility
     {
         return $this->createQueryBuilder('f')
@@ -46,5 +46,5 @@ class FacilityRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }
