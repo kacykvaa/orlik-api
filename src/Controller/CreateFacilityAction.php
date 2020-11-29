@@ -6,6 +6,7 @@ use App\Entity\Address;
 use App\Entity\Facility;
 use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,12 +27,11 @@ class CreateFacilityAction extends AbstractController
      */
     public function __invoke(EntityManagerInterface $em, SerializerInterface $serializer)
     {
-        $facility = new Facility('Gimnazjum',['Football', 'Basketball'],
-        new Address('orla', '12','pris','12120'));
-        $facility->addImage(new Image('image', 'app/folder'));
-
-
-        $jsonContent= $serializer->serialize($facility, 'json', [
+        $data = file_get_contents('php://input');
+        $facility = json_decode($data);
+        var_dump($facility);die();
+//        $facility = new Facility($data);
+            $jsonContent= $serializer->serialize($facility, 'json', [
             ObjectNormalizer::CIRCULAR_REFERENCE_HANDLER => function($object){
                 return $object->getId();
             }

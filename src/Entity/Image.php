@@ -39,8 +39,6 @@ class Image
         $this->path = $path;
     }
 
-    
-
     public function getId(): ?int
     {
         return $this->id;
@@ -51,34 +49,13 @@ class Image
         return $this->filename;
     }
 
-    public function setFilename(string $filename): self
-    {
-        $this->filename = $filename;
-
-        return $this;
-    }
-
     public function getPath(): ?string
     {
         return $this->path;
     }
 
-    public function setPath(string $path): self
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
     public function getFacility(): Facility
     {
         return $this->facility;
-    }
-
-    public function setFacility(Facility $facility): self
-    {
-        $this->facility = $facility;
-
-        return $this;
     }
 }

@@ -23,7 +23,7 @@ class Address
     private string $street;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=40)
      */
     private string $streetNumber;
 
@@ -33,7 +33,7 @@ class Address
     private string $city;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=20)
      */
     private string $postCode;
 
@@ -45,17 +45,9 @@ class Address
     /**
      * @return mixed
      */
-    public function getFacility()
+    public function facility()
     {
         return $this->facility;
-    }
-
-    /**
-     * @param mixed $facility
-     */
-    public function setFacility($facility): void
-    {
-        $this->facility = $facility;
     }
 
     public function __construct(string $street, string $streetNumber, string $city, string $postCode)
@@ -66,27 +58,27 @@ class Address
         $this->postCode = $postCode;
     }
 
-    public function getId(): ?int
+    public function id(): ?int
     {
         return $this->id;
     }
 
-    public function getStreet(): ?string
+    public function street(): ?string
     {
         return $this->street;
     }
 
-    public function getStreetNumber(): ?string
+    public function streetNumber(): ?string
     {
         return $this->streetNumber;
     }
 
-    public function getCity(): ?string
+    public function city(): ?string
     {
         return $this->city;
     }
 
-    public function getPostCode(): ?string
+    public function postCode(): ?string
     {
         return $this->postCode;
     }

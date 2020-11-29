@@ -49,24 +49,24 @@ class Facility
         $this->images = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function id(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function name(): ?string
     {
         return $this->name;
     }
 
 
-    public function getPitchTypes(): ?array
+    public function pitchTypes(): ?array
     {
         return $this->pitchTypes;
     }
 
 
-    public function getAddress(): ?Address
+    public function address(): ?Address
     {
         return $this->address;
     }
@@ -74,41 +74,10 @@ class Facility
     /**
      * @return Collection|Image[]
      */
-    public function getImage(): Collection
+    public function image(): Collection
     {
         return $this->images;
     }
 
-    public function addAddress(Address $address): self
-    {
-        if (!$this->address->contains($address)) {
-            $this->address = $address;
-            $address->setFacility($this);
-        }
 
-        return $this;
-    }
-
-
-    public function addImage(Image $image): self
-    {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-            $image->setFacility($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getFacility() === $this) {
-                $image->setFacility(null);
-            }
-        }
-
-        return $this;
-    }
 }
