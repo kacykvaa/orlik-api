@@ -27,13 +27,13 @@ class Facility
     /**
      * @ORM\Column(type="array")
      */
-    private array $pitchTypes;
+    private  $pitchTypes;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, inversedBy="facility", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="facility_id", referencedColumnName="id")
      */
-    private  $address;
+    private $address;
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="facility", cascade={"persist"})
@@ -41,7 +41,7 @@ class Facility
     private $images;
 
 
-    public function __construct(string $name, array $pitchTypes,  $address)
+    public function __construct(string $name, $pitchTypes,  $address)
     {
         $this->name = $name;
         $this->pitchTypes = $pitchTypes;

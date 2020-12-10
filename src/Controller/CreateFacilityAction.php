@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\Facility;
-use App\Entity\Image;
+use App\Form\AddressFormType;
+use App\Form\CreateFacilityFormType;
+use App\Form\Model\AddressDTO;
+use App\Form\Model\CreateFacilityDTO;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
+
 
 /**
  * @method saveEntities(array $array)
@@ -21,23 +22,27 @@ class CreateFacilityAction extends AbstractController
 {
     /**
      * @Route("/api/create/facility", name="create_facility")
-     * @param EntityManagerInterface $em
-     * @param SerializerInterface $serializer
+     * @param Request $request
      * @return Response
      */
-    public function __invoke(EntityManagerInterface $em, SerializerInterface $serializer)
+    public function __invoke(Request $request, EntityManagerInterface $em)
     {
-        $data = file_get_contents('php://input');
-        $facility = json_decode($data);
-        var_dump($facility);die();
-//        $facility = new Facility($data);
-            $jsonContent= $serializer->serialize($facility, 'json', [
-            ObjectNormalizer::CIRCULAR_REFERENCE_HANDLER => function($object){
-                return $object->getId();
-            }
-        ]);
-        $em->persist($facility);
-        $em->flush();
-        return new JsonResponse($jsonContent, 201);
+        $data = json_decode($request->getContent(), true);
+
+        $facilityForm = $this->createForm(CreateFacilityFormType::class);
+            
+        $facilityForm->submit($data);
+//        if ($form->isSubmitted() && $form->isValid()) {
+        /** @var CreateFacilityDTO $facilityDto */
+        $facilityDto = $facilityForm->getData();
+        $createFacility = new Facility($facilityDto->name, $facilityDto->pitchTypes);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($createFacility);
+            $em->flush();
+//            return new Response($data, 201);
+//        }
+        return new Response($createFacility, 201);
+
     }
 }
