@@ -10,5 +10,5 @@ namespace App\Form\Model;
 {
     public $name;
     public array $pitchTypes = [];
-    public AddressDTO  $address;
+//    public AddressDTO  $address;
 }

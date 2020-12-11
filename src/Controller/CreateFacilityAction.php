@@ -29,20 +29,20 @@ class CreateFacilityAction extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $facilityForm = $this->createForm(CreateFacilityFormType::class);
-            
-        $facilityForm->submit($data);
-//        if ($form->isSubmitted() && $form->isValid()) {
-        /** @var CreateFacilityDTO $facilityDto */
-        $facilityDto = $facilityForm->getData();
-        $createFacility = new Facility($facilityDto->name, $facilityDto->pitchTypes);
+        $addressForm = $this->createForm(AddressFormType::class);
+        $addressForm->submit($data);
+        /**@var AddressDTO $addressDto */
+        $addressDto = $addressForm->getData();dd(var_dump($addressDto->street));
+        $addAddress = new Address($addressDto->street, $addressDto->streetNumber,
+            $addressDto->city,$addressDto->postCode);
+
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($createFacility);
+            $em->persist($addAddress);
             $em->flush();
 //            return new Response($data, 201);
 //        }
-        return new Response($createFacility, 201);
+        return new Response($addAddress, 201);
 
     }
 }

@@ -6,12 +6,12 @@ namespace App\Form\Model;
 
 class AddressDTO
 {
-    public string $street;
+    public $street;
 
-    public string $streetNumber;
+    public  $streetNumber;
 
-    public string $city;
+    public  $city;
 
-    public string $postCode;
+    public  $postCode;
 
 }
