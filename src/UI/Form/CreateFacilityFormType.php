@@ -2,7 +2,7 @@
 
 namespace App\UI\Form;
 
-use App\UI\Model\CreateFacilityDTO;
+use App\UI\Model\Request\Facility;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +20,7 @@ class CreateFacilityFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => CreateFacilityDTO::class,
+            'data_class' => Facility::class,
         ]);
     }
 }

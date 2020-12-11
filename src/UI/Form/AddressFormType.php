@@ -2,8 +2,7 @@
 
 namespace App\UI\Form;
 
-use App\Application\Entity\Address;
-use App\UI\Model\AddressDTO;
+use App\UI\Model\Request\Address;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,7 +21,7 @@ class AddressFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => AddressDTO::class
+            'data_class' => Address::class
         ]);
     }
 }

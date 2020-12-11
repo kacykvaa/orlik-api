@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\UI\Model;
+namespace App\UI\Model\Request;
 
 
-class AddressDTO
+class Address
 {
     public $street;
 
