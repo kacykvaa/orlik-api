@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Application\Entity;
 
 use App\Common\Doctrine\GeneratedIdColumn;
 use Doctrine\ORM\Mapping as ORM;

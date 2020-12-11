@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 
-use App\Entity\User;
+use App\Application\Entity\User;
 
 class UserFixtures extends AbstractFixture
 {

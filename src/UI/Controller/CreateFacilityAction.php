@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controller;
+namespace App\UI\Controller;
 
-use App\Entity\Address;
-use App\Entity\Facility;
-use App\Form\AddressFormType;
-use App\Form\CreateFacilityFormType;
-use App\Form\Model\AddressDTO;
-use App\Form\Model\CreateFacilityDTO;
+use App\Application\Entity\Address;
+use App\Application\Entity\Facility;
+use App\UI\Form\AddressFormType;
+use App\UI\Form\CreateFacilityFormType;
+use App\UI\Model\AddressDTO;
+use App\UI\Model\CreateFacilityDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

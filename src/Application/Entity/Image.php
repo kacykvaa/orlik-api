@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Application\Entity;
 
-use App\Repository\ImageRepository;
+use App\Application\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

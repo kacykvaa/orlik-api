@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Application\Entity;
 
-use App\Repository\AdressRepository;
+use App\Application\Repository\AdressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Form\Model;
+namespace App\UI\Model;
 
 
- use App\Form\AddressFormType;
+ use App\UI\Form\AddressFormType;
 
  class CreateFacilityDTO
 {

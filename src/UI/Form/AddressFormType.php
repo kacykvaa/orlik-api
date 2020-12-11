@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Form;
+namespace App\UI\Form;
 
-use App\Entity\Address;
-use App\Form\Model\AddressDTO;
+use App\Application\Entity\Address;
+use App\UI\Model\AddressDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

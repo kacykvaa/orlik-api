@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace App\UI\Form;
 
-use App\Form\Model\CreateFacilityDTO;
+use App\UI\Model\CreateFacilityDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

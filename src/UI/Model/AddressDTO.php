@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Form\Model;
+namespace App\UI\Model;
 
 
 class AddressDTO
