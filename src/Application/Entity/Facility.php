@@ -32,7 +32,7 @@ class Facility
     /**
      * @ORM\OneToOne(targetEntity=Address::class, inversedBy="facility", cascade={"persist", "remove"})
      */
-    private $address;
+    private Address $address;
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="facility", cascade={"persist"})
@@ -40,7 +40,7 @@ class Facility
     private $images;
 
 
-    public function __construct(string $name, $pitchTypes,  $address)
+    public function __construct(string $name, array $pitchTypes, Address $address)
     {
         $this->name = $name;
         $this->pitchTypes = $pitchTypes;
