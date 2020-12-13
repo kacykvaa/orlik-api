@@ -23,4 +23,5 @@ class Facility
      * @Assert\NotNull()
      */
     public $address;
+
 }

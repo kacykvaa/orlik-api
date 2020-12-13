@@ -3,6 +3,7 @@
 namespace App\Application\Entity;
 
 use App\Application\Repository\FacilityRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,11 +40,17 @@ class Facility
      */
     private $images;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private DateTime $createdAt;
+
     public function __construct(string $name, array $pitchTypes)
     {
         $this->name = $name;
         $this->pitchTypes = $pitchTypes;
         $this->images = new ArrayCollection();
+        $this->createdAt = new DateTime("now");
     }
 
     public function id(): ?int
@@ -72,6 +79,11 @@ class Facility
     public function image(): Collection
     {
         return $this->images;
+    }
+
+   public function createdAt(): DateTime
+    {
+        return $this->createdAt;
     }
 
     public function updateAddress(Address $address): void

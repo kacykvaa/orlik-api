@@ -37,9 +37,12 @@ class CreateFacilityAction extends AbstractRestAction
         );
         $facility->updateAddress($address);
 
+        $createdAt = $facility->createdAt();
+        $responseFacility = new \App\UI\Model\Response\Facility($facilityRequest->name, $facilityRequest->pitchTypes, $facilityRequest->address, $createdAt);
+
         $em->persist($facility);
         $em->flush();
 
-        return new JsonResponse('created');
+        return new JsonResponse($responseFacility);
     }
 }
