@@ -42,6 +42,8 @@ class Address
 
     /**
      * @ORM\OneToOne(targetEntity=Facility::class, mappedBy="facility", cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="id")
+
      */
     private $facility;
 

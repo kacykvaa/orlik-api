@@ -30,7 +30,7 @@ class CreateFacilityAction extends AbstractRestAction
         $facility = new FacilityEntity($facilityRequest->name, $facilityRequest->pitchTypes, $facilityRequest->address);
 
         $em->persist($facility);
-        $em->flush();
+        $em->flush();dd();
 
     }
 }

@@ -31,7 +31,6 @@ class Facility
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, inversedBy="facility", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="id")
      */
     private $address;
 
