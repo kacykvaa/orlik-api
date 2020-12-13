@@ -1,7 +1,6 @@
 <?php
-
 namespace App\UI\Controller;
-
+use App\Application\Entity\Address as AddressEntity;
 use App\Application\Entity\Facility as FacilityEntity;
 use App\UI\Model\Request\Facility;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,9 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 
-/**
- * @method saveEntities(array $array)
- */
 class CreateFacilityAction extends AbstractRestAction
 {
     /**
@@ -27,10 +23,19 @@ class CreateFacilityAction extends AbstractRestAction
     {
         /** @var Facility $facilityRequest */
         $facilityRequest = $serializer->deserialize($request->getContent(), Facility::class, 'json');
-        $facility = new FacilityEntity($facilityRequest->name, $facilityRequest->pitchTypes, $facilityRequest->address);
-
+        dd($facilityRequest);
+        $requestAddress = $facilityRequest->address;
+        $facility = new FacilityEntity($facilityRequest->name, $facilityRequest->pitchTypes);
+        $address = new AddressEntity(
+            $requestAddress->street,
+            $requestAddress->streetNumber,
+            $requestAddress->city,
+            $requestAddress->postCode,
+            $facility
+        );
+        $facility->updateAddress($address);
         $em->persist($facility);
-        $em->flush();dd();
-
+        $em->flush();
+        return new JsonResponse('created');
     }
 }
