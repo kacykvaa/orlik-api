@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-
 use App\Application\Entity\User;
 
 class UserFixtures extends AbstractFixture
@@ -12,7 +11,7 @@ class UserFixtures extends AbstractFixture
         $user = new User(
             'user@example.com',
             '$argon2i$v=19$m=65536,t=4,p=1$WXRuUVVKMjUwS2psS3h6OQ$JVZ8DyPMQHrFpjuSzftz/alIPgRb+ZSrl57MHAU6Zh0',
-        'John',
+            'John',
             'Travolta'
         );
 

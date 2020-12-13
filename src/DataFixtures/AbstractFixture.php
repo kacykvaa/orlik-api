@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Connection;
@@ -33,7 +32,7 @@ abstract class AbstractFixture extends Fixture
         $this->execute();
     }
 
-    public function saveEntities($entities) : void
+    public function saveEntities($entities): void
     {
         if ($entities instanceof Collection) {
             $entities = $entities->toArray();

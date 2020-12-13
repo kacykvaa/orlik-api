@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Common\Model\Value\Enum;
 
-
 use MyCLabs\Enum\Enum;
 
 class PitchType extends Enum
@@ -16,10 +15,12 @@ class PitchType extends Enum
     {
         return new self(self::FOOTBALL);
     }
+
     public static function BASKETBALL(): PitchType
     {
         return new self(self::BASKETBALL);
     }
+
     public static function TENNIS(): PitchType
     {
         return new self(self::TENNIS);

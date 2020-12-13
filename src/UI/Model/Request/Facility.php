@@ -5,22 +5,22 @@ namespace App\UI\Model\Request;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
- class Facility
+class Facility
 {
-     /**
-      * @Assert\NotBlank(message="You need to pass a name")
-      * @Assert\NotNull()
-      */
-    public $name;
-     /**
-      * @Assert\NotNull()
-      * @Assert\NotBlank
-      * @ORM\Column(type="array")
-      */
-    public $pitchTypes = [];
-     /**
-      * @var mixed| Address
-      * @Assert\NotNull()
-      */
+    /**
+     * @Assert\NotBlank(message="You need to pass a name")
+     * @Assert\NotNull()
+     */
+    public string $name;
+    /**
+     * @Assert\NotNull()
+     * @Assert\NotBlank
+     * @ORM\Column(type="array")
+     */
+    public array $pitchTypes = [];
+    /**
+     * @var mixed|Address
+     * @Assert\NotNull()
+     */
     public $address;
 }
