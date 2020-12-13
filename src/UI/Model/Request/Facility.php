@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
       */
     public $pitchTypes = [];
      /**
-      * @var mixed|\App\Application\Entity\Address
+      * @var mixed| Address
       * @Assert\NotNull()
       */
     public $address;

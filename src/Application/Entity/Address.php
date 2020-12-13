@@ -30,13 +30,11 @@ class Address
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
      */
     private string $city;
 
     /**
      * @ORM\Column(type="string", length=20)
-     * @Assert\NotNull
      */
     private string $postCode;
 
