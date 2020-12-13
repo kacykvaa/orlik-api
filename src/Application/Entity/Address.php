@@ -4,6 +4,7 @@ namespace App\Application\Entity;
 
 use App\Application\Repository\AdressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AdressRepository::class)
@@ -15,7 +16,7 @@ class Address
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private  $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -29,18 +30,20 @@ class Address
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private string $city;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotNull
      */
     private string $postCode;
 
     /**
-     * @ORM\OneToOne(targetEntity=Facility::class, mappedBy="address", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity=Facility::class, mappedBy="facility", cascade={"persist"})
      */
-    private  $facility;
+    private $facility;
 
     /**
      * @return mixed
