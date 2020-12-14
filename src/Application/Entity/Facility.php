@@ -4,6 +4,7 @@ namespace App\Application\Entity;
 
 use App\Application\Repository\FacilityRepository;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,19 +39,19 @@ class Facility
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="facility", cascade={"persist"})
      */
-    private $images;
+    private Collection $images;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", precision=6)
      */
-    private Carbon $createdAt;
+    private CarbonImmutable $createdAt;
 
     public function __construct(string $name, array $pitchTypes)
     {
         $this->name = $name;
         $this->pitchTypes = $pitchTypes;
         $this->images = new ArrayCollection();
-        $this->createdAt = Carbon::now();
+        $this->createdAt = new CarbonImmutable();
     }
 
     public function id(): ?int
@@ -81,9 +82,9 @@ class Facility
         return $this->images;
     }
 
-   public function createdAt(): string
+   public function createdAt(): CarbonImmutable
    {
-        return $this->createdAt->format('Y-m-d H:i:s');
+        return $this->createdAt;
     }
 
     public function updateAddress(Address $address): void
