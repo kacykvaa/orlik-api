@@ -3,7 +3,7 @@
 namespace App\Application\Entity;
 
 use App\Application\Repository\FacilityRepository;
-use DateTime;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,14 +43,14 @@ class Facility
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTime $createdAt;
+    private Carbon $createdAt;
 
     public function __construct(string $name, array $pitchTypes)
     {
         $this->name = $name;
         $this->pitchTypes = $pitchTypes;
         $this->images = new ArrayCollection();
-        $this->createdAt = new DateTime("now");
+        $this->createdAt = Carbon::now();
     }
 
     public function id(): ?int
@@ -81,9 +81,9 @@ class Facility
         return $this->images;
     }
 
-   public function createdAt(): DateTime
-    {
-        return $this->createdAt;
+   public function createdAt(): string
+   {
+        return $this->createdAt->format('Y-m-d H:i:s');
     }
 
     public function updateAddress(Address $address): void

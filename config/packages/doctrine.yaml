@@ -1,5 +1,8 @@
 doctrine:
     dbal:
+        types:
+            datetime_immutable: \Carbon\Doctrine\DateTimeImmutableType
+            datetime: \Carbon\Doctrine\DateTimeType
         driver: pdo_mysql
         url: '%env(resolve:DATABASE_URL)%'
 

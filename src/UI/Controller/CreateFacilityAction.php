@@ -4,6 +4,7 @@ namespace App\UI\Controller;
 
 use App\Application\Entity\Address as AddressEntity;
 use App\Application\Entity\Facility as FacilityEntity;
+use \App\UI\Model\Response\Facility as FacilityResponse;
 use App\UI\Model\Request\Facility;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +39,7 @@ class CreateFacilityAction extends AbstractRestAction
         $facility->updateAddress($address);
 
         $createdAt = $facility->createdAt();
-        $responseFacility = new \App\UI\Model\Response\Facility($facilityRequest->name, $facilityRequest->pitchTypes, $facilityRequest->address, $createdAt);
+        $responseFacility = new FacilityResponse($facilityRequest->name, $facilityRequest->pitchTypes, $facilityRequest->address, $createdAt);
 
         $em->persist($facility);
         $em->flush();

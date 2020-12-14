@@ -11,7 +11,7 @@ class Facility
     public string $name;
     public array $pitchTypes;
     public Address $address;
-    public DateTime $createdAt;
+    public  $createdAt;
 
     public function __construct(string $name, array $pitchTypes, $address, $createdAt)
     {

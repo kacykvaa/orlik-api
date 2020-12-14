@@ -132,6 +132,9 @@
     "namshi/jose": {
         "version": "7.2.3"
     },
+    "nesbot/carbon": {
+        "version": "2.42.0"
+    },
     "nikic/php-parser": {
         "version": "v4.10.2"
     },
