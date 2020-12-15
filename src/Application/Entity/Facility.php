@@ -3,7 +3,6 @@
 namespace App\Application\Entity;
 
 use App\Application\Repository\FacilityRepository;
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
