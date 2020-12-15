@@ -44,6 +44,7 @@ class CreateFacilityAction extends AbstractRestAction
         $em->persist($facility);
         $em->flush();
 
-        return new JsonResponse($responseFacility);
+        return new Response($serializer->serialize($responseFacility, 'json'));
+//        return new JsonResponse($responseFacility);
     }
 }
