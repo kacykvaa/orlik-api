@@ -4,7 +4,6 @@
 namespace App\Common\Carbon\Bridge;
 
 
-use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Monolog\Handler\IFTTTHandler;
 use Symfony\Component\Serializer\Exception\CircularReferenceException;
@@ -24,7 +23,7 @@ class CarbonNormalizer implements NormalizerInterface
         return $object->format(\DateTimeInterface::RFC3339);
     }
 
-    public function supportsNormalization($data, string $format = null)
+    public function supportsNormalization($data, string $format = null): bool
     {
         return $data instanceof CarbonInterface;
     }

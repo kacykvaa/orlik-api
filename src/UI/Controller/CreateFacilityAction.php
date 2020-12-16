@@ -7,7 +7,6 @@ use App\Application\Entity\Facility as FacilityEntity;
 use \App\UI\Model\Response\Facility as FacilityResponse;
 use App\UI\Model\Request\Facility;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
