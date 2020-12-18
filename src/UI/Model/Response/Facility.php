@@ -10,10 +10,11 @@ class Facility
 {
     public string $name;
     public array $pitchTypes;
-    public Address $address;
+    // Czy to moze byc response
+    public \App\UI\Model\Response\Address $address;
     public CarbonInterface $createdAt;
 
-        public function __construct(string $name, array $pitchTypes, $address, CarbonInterface $createdAt)
+        public function __construct(string $name, array $pitchTypes, \App\UI\Model\Response\Address $address, CarbonInterface $createdAt)
     {
         $this->name = $name;
         $this->pitchTypes = $pitchTypes;
