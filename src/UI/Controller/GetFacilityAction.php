@@ -2,10 +2,8 @@
 
 namespace App\UI\Controller;
 
-use App\Application\Entity\Address as AddressEntity;
 use App\Application\Entity\Facility;
-use App\Application\Entity\Facility as FacilityEntity;
-use App\UI\Model\Request\Address;
+use App\UI\Model\Response\Address;
 use App\UI\Model\Response\Facility as FacilityResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,11 +19,12 @@ class GetFacilityAction extends AbstractRestAction
      */
     public function __invoke(Facility $facility, SerializerInterface $serializer): Response
     {
-        $getAddress = $facility->address();
-        dd($facility->address());
-        $address = new \App\UI\Model\Response\Address($getAddress->street(),$getAddress->streetNumber(),$getAddress->city(),$getAddress->postCode());
-        $responseFacility = new FacilityResponse($facility->name(), $facility->pitchTypes(), $address, $facility->createdAt());
+        $address = $facility->address();
+        $responseAddress = new Address($address->street(), $address->streetNumber(),
+            $address->city(), $address->postCode());
 
+        $responseFacility = new FacilityResponse($facility->name(), $facility->pitchTypes(), $responseAddress,
+            $facility->createdAt());
         return new Response($serializer->serialize($responseFacility, 'json'));
     }
 }

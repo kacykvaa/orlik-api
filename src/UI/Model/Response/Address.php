@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\UI\Model\Response;
-
 
 class Address
 {
@@ -14,7 +12,7 @@ class Address
 
     public string $postCode;
 
-    public function __construct($street, $streetNumber, $city, $postCode)
+    public function __construct(string $street, string $streetNumber, string $city, string $postCode)
     {
         $this->street = $street;
         $this->streetNumber = $streetNumber;

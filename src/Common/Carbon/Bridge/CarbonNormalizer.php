@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Common\Carbon\Bridge;
-
 
 use Carbon\CarbonInterface;
 use Monolog\Handler\IFTTTHandler;
@@ -27,5 +25,4 @@ class CarbonNormalizer implements NormalizerInterface
     {
         return $data instanceof CarbonInterface;
     }
-
 }

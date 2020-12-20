@@ -7,11 +7,6 @@ use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\DBAL\Types\Type;
-
-
-Type::addType('carbon_immutable', '\Carbon\Doctrine\DateTimeImmutableType');
-
 
 /**
  * @ORM\Entity(repositoryClass=FacilityRepository::class)

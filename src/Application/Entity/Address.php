@@ -5,7 +5,6 @@ namespace App\Application\Entity;
 use App\Application\Repository\AdressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * @ORM\Entity(repositoryClass=AdressRepository::class)
  */
