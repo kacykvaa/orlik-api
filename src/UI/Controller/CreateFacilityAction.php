@@ -41,11 +41,11 @@ class CreateFacilityAction extends AbstractRestAction
         $em->persist($facility);
         $em->flush();
 
-        $createdAt = $facility->createdAt();
+
         $responseAddress = new AddressResponse($address->id(), $address->street(), $address->streetNumber(),
             $address->city(), $address->postCode());
         $responseFacility = new FacilityResponse($facility->id(), $facility->name(), $facility->pitchTypes(),
-            $responseAddress, $createdAt);
+            $responseAddress, $facility->createdAt());
 
         return new Response($serializer->serialize($responseFacility, 'json'));
     }
