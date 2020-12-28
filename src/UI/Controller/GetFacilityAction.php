@@ -26,8 +26,9 @@ class GetFacilityAction extends AbstractRestAction
         $address = $facility->address();
         $responseAddress = new AddressResponse($address->id() ,$address->street(), $address->streetNumber(),
             $address->city(), $address->postCode());
-        $responseFacility = new FacilityResponse($facility->id(), $facility->name(), $facility->pitchTypes(), $responseAddress,
-            $facility->createdAt());
+        $responseFacility = new FacilityResponse($facility->id(), $facility->name(), $facility->pitchTypes(),
+            $responseAddress, $facility->createdAt());
+
         return new Response($serializer->serialize($responseFacility, 'json'));
     }
 }
