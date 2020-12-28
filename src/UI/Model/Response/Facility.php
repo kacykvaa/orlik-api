@@ -7,9 +7,13 @@ use Carbon\CarbonInterface;
 class Facility
 {
     public int $id;
+
     public string $name;
+
     public array $pitchTypes;
+
     public Address $address;
+
     public CarbonInterface $createdAt;
 
     public function __construct(int $id, string $name, array $pitchTypes, Address $address, CarbonInterface $createdAt)
