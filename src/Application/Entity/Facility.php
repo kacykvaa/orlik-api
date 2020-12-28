@@ -41,7 +41,7 @@ class Facility
     private Collection $images;
 
     /**
-     * @ORM\Column(type="datetime", precision=6)
+     * @ORM\Column(type="carbon_immutable")
      */
     private CarbonImmutable $createdAt;
 
