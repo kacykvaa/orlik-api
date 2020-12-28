@@ -4,7 +4,7 @@ namespace App\UI\Controller;
 
 use App\Application\Entity\Address as AddressEntity;
 use App\Application\Entity\Facility as FacilityEntity;
-use App\UI\Model\Response\Address;
+use App\UI\Model\Response\Address as AddressResponse;
 use \App\UI\Model\Response\Facility as FacilityResponse;
 use App\UI\Model\Request\Facility;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,14 +38,14 @@ class CreateFacilityAction extends AbstractRestAction
         );
         $facility->updateAddress($address);
 
-        $createdAt = $facility->createdAt();
-        $responseAddress = new Address($requestAddress->street, $requestAddress->streetNumber, $requestAddress->city,
-            $requestAddress->postCode);
-        $responseFacility = new FacilityResponse($facilityRequest->name, $facilityRequest->pitchTypes,
-            $responseAddress, $createdAt);
-
         $em->persist($facility);
         $em->flush();
+
+        $createdAt = $facility->createdAt();
+        $responseAddress = new AddressResponse($address->id(), $address->street(), $address->streetNumber(), $address->city(), $address->postCode());
+        $responseFacility = new FacilityResponse($facility->id(), $facility->name(), $facility->pitchTypes(),
+            $responseAddress, $createdAt);
+
 
         return new Response($serializer->serialize($responseFacility, 'json'));
     }

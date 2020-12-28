@@ -20,10 +20,9 @@ class GetFacilityAction extends AbstractRestAction
     public function __invoke(Facility $facility, SerializerInterface $serializer): Response
     {
         $address = $facility->address();
-        $responseAddress = new Address($address->street(), $address->streetNumber(),
+        $responseAddress = new Address($address->id() ,$address->street(), $address->streetNumber(),
             $address->city(), $address->postCode());
-
-        $responseFacility = new FacilityResponse($facility->name(), $facility->pitchTypes(), $responseAddress,
+        $responseFacility = new FacilityResponse($facility->id(), $facility->name(), $facility->pitchTypes(), $responseAddress,
             $facility->createdAt());
         return new Response($serializer->serialize($responseFacility, 'json'));
     }
