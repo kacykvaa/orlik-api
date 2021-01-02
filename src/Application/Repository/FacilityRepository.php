@@ -26,16 +26,22 @@ class FacilityRepository extends ServiceEntityRepository
         return $facility;
     }
 
-    public function checkIfFacilityExists(string $name)
+    public function checkIfFacilityExists(string $name, string $street, string $streetNumber, string $postCode)
     {
-        $qb = $this->createQueryBuilder('n')
-            ->where('n.name = :name')
+        $qb = $this->createQueryBuilder('f')
+            ->orWhere('f.name = :name')
+            ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.postCode = :postCode')
+            ->join('f.address', 'a')
             ->setParameter('name', $name)
+            ->setParameter('street', $street)
+            ->setParameter('streetNumber', $streetNumber)
+            ->setParameter('postCode', $postCode)
             ->getQuery()
+            ->setMaxResults(1)
             ->execute();
 
-        if ($name = $qb){
-            throw new ResourceNotFoundException('Facility with that name exists');
+        if ($qb){
+            throw new ResourceNotFoundException('Facility exists');
         }
     }
 }

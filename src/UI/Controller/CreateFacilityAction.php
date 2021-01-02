@@ -47,7 +47,11 @@ class CreateFacilityAction extends AbstractRestAction
             );
             $facility->updateAddress($address);
 
-            $facilityRepository->checkIfFacilityExists($facility->name());
+            $facilityRepository->checkIfFacilityExists(
+                $facility->name(),
+                $address->street(),
+                $address->streetNumber(),
+                $address->postCode());
 
             $em->persist($facility);
             $em->flush();
