@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace App\Application\Repository;
 
 use App\Application\Entity\Facility;
+use App\Common\Exception\DuplicateEntityException;
 use App\Common\Exception\ResourceNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,20 +29,20 @@ class FacilityRepository extends ServiceEntityRepository
 
     public function checkIfFacilityExists(string $name, string $street, string $streetNumber, string $postCode)
     {
-        $qb = $this->createQueryBuilder('f')
+        $count = $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->leftJoin('f.address', 'a')
             ->orWhere('f.name = :name')
             ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.postCode = :postCode')
-            ->join('f.address', 'a')
             ->setParameter('name', $name)
             ->setParameter('street', $street)
             ->setParameter('streetNumber', $streetNumber)
             ->setParameter('postCode', $postCode)
             ->getQuery()
-            ->setMaxResults(1)
-            ->execute();
+            ->getSingleScalarResult();
 
-        if ($qb){
-            throw new ResourceNotFoundException('Facility exists');
+        if($count !== 0) {
+            throw new DuplicateEntityException('Facility already exists');
         }
     }
 }
