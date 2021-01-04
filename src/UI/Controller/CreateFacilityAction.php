@@ -13,7 +13,6 @@ use App\UI\Model\Response\Address as AddressResponse;
 use \App\UI\Model\Response\Facility as FacilityResponse;
 use App\UI\Model\Request\Facility;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,20 +20,28 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class CreateFacilityAction extends AbstractRestAction
 {
+    private EntityManagerInterface $em;
+    private SerializerInterface $serializer;
+    private FacilityRepository $facilityRepository;
+
+    public function __construct(EntityManagerInterface $em, SerializerInterface $serializer,
+                                FacilityRepository $facilityRepository)
+    {
+        $this->em = $em;
+        $this->serializer = $serializer;
+        $this->facilityRepository = $facilityRepository;
+    }
+
     /**
-     * @Route("/api/create/facility", name="create_facility")
+     * @Route("/api/facilities", name="create_facility", methods={"POST"})
      * @param Request $request
-     * @param EntityManagerInterface $em
-     * @param SerializerInterface $serializer
-     * @param FacilityRepository $facilityRepository
      * @return Response
      */
-    public function __invoke(Request $request, EntityManagerInterface $em, SerializerInterface $serializer,
-                             FacilityRepository $facilityRepository): Response
+    public function __invoke(Request $request): Response
     {
         try {
             /** @var Facility $facilityRequest */
-            $facilityRequest = $serializer->deserialize($request->getContent(), Facility::class, 'json');
+            $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
 
             $requestAddress = $facilityRequest->address;
             $facility = new FacilityEntity($facilityRequest->name, $facilityRequest->pitchTypes);
@@ -47,14 +54,14 @@ class CreateFacilityAction extends AbstractRestAction
             );
             $facility->updateAddress($address);
 
-            $facilityRepository->checkIfFacilityExists(
+            $this->facilityRepository->assertFacilityDoesNotExist(
                 $facility->name(),
                 $address->street(),
                 $address->streetNumber(),
                 $address->postCode());
 
-            $em->persist($facility);
-            $em->flush();
+            $this->em->persist($facility);
+            $this->em->flush();
 
             $responseAddress = new AddressResponse(
                 $address->id(),
@@ -68,7 +75,7 @@ class CreateFacilityAction extends AbstractRestAction
                 $responseAddress,
                 $facility->createdAt());
 
-            return new Response($serializer->serialize($responseFacility, 'json'));
+            return new Response($this->serializer->serialize($responseFacility, 'json'));
 
         } catch (ResourceNotFoundException $exception) {
             return new Response($exception->getMessage(), 404);

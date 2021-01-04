@@ -27,9 +27,9 @@ class FacilityRepository extends ServiceEntityRepository
         return $facility;
     }
 
-    public function checkIfFacilityExists(string $name, string $street, string $streetNumber, string $postCode)
+    public function assertFacilityDoesNotExist(string $name, string $street, string $streetNumber, string $postCode)
     {
-        $count = $this->createQueryBuilder('f')
+        $count = (int)$this->createQueryBuilder('f')
             ->select('COUNT(f.id)')
             ->leftJoin('f.address', 'a')
             ->orWhere('f.name = :name')
@@ -41,7 +41,7 @@ class FacilityRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
 
-        if($count !== 0) {
+        if ($count !== 0){
             throw new DuplicateEntityException('Facility already exists');
         }
     }
