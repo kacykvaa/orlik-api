@@ -5,11 +5,11 @@ declare(strict_types=1);
 
 namespace App\Application\Entity;
 
-use App\Application\Repository\AdressRepository;
+use App\Application\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=AdressRepository::class)
+ * @ORM\Entity(repositoryClass=AddressRepository::class)
  */
 class Address
 {
@@ -86,5 +86,22 @@ class Address
     public function postCode(): ?string
     {
         return $this->postCode;
+    }
+
+    public function updateStreet($street): void
+    {
+        $this->street = $street;
+    }
+    public function updateStreetNumber($streetNumber): void
+    {
+        $this->streetNumber = $streetNumber;
+    }
+    public function updateCity($city): void
+    {
+        $this->city = $city;
+    }
+    public function updatePostCode($postCode): void
+    {
+        $this->postCode = $postCode;
     }
 }

@@ -84,13 +84,23 @@ class Facility
         return $this->images;
     }
 
-   public function createdAt(): CarbonImmutable
-   {
+    public function createdAt(): CarbonImmutable
+    {
         return $this->createdAt;
     }
 
     public function updateAddress(Address $address): void
     {
         $this->address = $address;
+    }
+
+    public function updateName(string $name):void
+    {
+        $this->name = $name;
+    }
+
+    public function updatePitchTypes(array $pitchTypes): void
+    {
+        $this->pitchTypes = $pitchTypes;
     }
 }
