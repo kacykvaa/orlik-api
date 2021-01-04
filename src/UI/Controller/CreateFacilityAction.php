@@ -72,8 +72,6 @@ class CreateFacilityAction extends AbstractRestAction
 
         } catch (ResourceNotFoundException $exception) {
             return new Response($exception->getMessage(), 404);
-        } catch (Exception $exception) {
-            return new Response('Something bad happened', 500);
         }
     }
 }

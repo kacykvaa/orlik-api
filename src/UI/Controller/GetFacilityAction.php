@@ -41,6 +41,7 @@ class GetFacilityAction extends AbstractRestAction
                 $facility->createdAt());
 
             return new Response($serializer->serialize($responseFacility, 'json'));
+
         } catch (ResourceNotFoundException $exception) {
             return new Response($exception->getMessage(), 404);
         }
