@@ -21,8 +21,11 @@ class UpdateFacilityAction extends AbstractRestAction
     private SerializerInterface $serializer;
     private EntityManagerInterface $em;
 
-    public function __construct(FacilityRepository $facilityRepository, SerializerInterface $serializer,
-                                EntityManagerInterface $em)
+    public function __construct(
+        FacilityRepository $facilityRepository,
+        SerializerInterface $serializer,
+        EntityManagerInterface $em
+    )
     {
         $this->facilityRepository = $facilityRepository;
         $this->serializer = $serializer;
