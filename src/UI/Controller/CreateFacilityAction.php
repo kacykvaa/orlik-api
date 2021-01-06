@@ -12,6 +12,8 @@ use App\Common\Exception\ResourceNotFoundException;
 use App\UI\Model\Response\Address as AddressResponse;
 use \App\UI\Model\Response\Facility as FacilityResponse;
 use App\UI\Model\Request\Facility;
+use App\UI\Model\Response\Factory\AddressViewModelFactory;
+use App\UI\Model\Response\Factory\FacilityViewModelFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,13 +25,19 @@ class CreateFacilityAction extends AbstractRestAction
     private EntityManagerInterface $em;
     private SerializerInterface $serializer;
     private FacilityRepository $facilityRepository;
+    private FacilityViewModelFactory $viewModelFactory;
 
-    public function __construct(EntityManagerInterface $em, SerializerInterface $serializer,
-                                FacilityRepository $facilityRepository)
+    public function __construct(
+        EntityManagerInterface $em,
+        SerializerInterface $serializer,
+        FacilityRepository $facilityRepository,
+        FacilityViewModelFactory $viewModelFactory
+    )
     {
         $this->em = $em;
         $this->serializer = $serializer;
         $this->facilityRepository = $facilityRepository;
+        $this->viewModelFactory = $viewModelFactory;
     }
 
     /**
@@ -63,19 +71,9 @@ class CreateFacilityAction extends AbstractRestAction
             $this->em->persist($facility);
             $this->em->flush();
 
-            $responseAddress = new AddressResponse(
-                $address->id(),
-                $address->street(),
-                $address->streetNumber(),
-                $address->city(),
-                $address->postCode());
-            $responseFacility = new FacilityResponse($facility->id(),
-                $facility->name(),
-                $facility->pitchTypes(),
-                $responseAddress,
-                $facility->createdAt());
+            $viewModel = $this->viewModelFactory->create($facility);
 
-            return new Response($this->serializer->serialize($responseFacility, 'json'));
+            return new Response($this->serializer->serialize($viewModel, 'json'));
 
         } catch (ResourceNotFoundException $exception) {
             return new Response($exception->getMessage(), 404);

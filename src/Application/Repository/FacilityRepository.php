@@ -45,4 +45,18 @@ class FacilityRepository extends ServiceEntityRepository
             throw new DuplicateEntityException('Facility already exists');
         }
     }
+
+    public function assertFacilityNameDoesNotExist(string $name)
+    {
+        $count = (int)$this->createQueryBuilder('n')
+            ->select('COUNT(n.id)')
+            ->Where('n.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        if ($count !== 0){
+            throw new DuplicateEntityException('Facility with that name already exists');
+        }
+    }
 }

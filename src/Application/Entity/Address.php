@@ -88,20 +88,11 @@ class Address
         return $this->postCode;
     }
 
-    public function updateStreet($street): void
+    public function updateAddress(string $street, string $streetNumber, string $city, string $postCode)
     {
         $this->street = $street;
-    }
-    public function updateStreetNumber($streetNumber): void
-    {
         $this->streetNumber = $streetNumber;
-    }
-    public function updateCity($city): void
-    {
         $this->city = $city;
-    }
-    public function updatePostCode($postCode): void
-    {
         $this->postCode = $postCode;
     }
 }

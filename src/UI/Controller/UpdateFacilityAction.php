@@ -6,9 +6,10 @@ declare(strict_types=1);
 namespace App\UI\Controller;
 
 use App\Application\Repository\FacilityRepository;
+use App\Common\Exception\DuplicateEntityException;
+use App\Common\Exception\ResourceNotFoundException;
 use App\UI\Model\Request\Facility;
-use App\UI\Model\Response\Address as AddressResponse;
-use App\UI\Model\Response\Facility as FacilityResponse;
+use App\UI\Model\Response\Factory\FacilityViewModelFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,16 +21,19 @@ class UpdateFacilityAction extends AbstractRestAction
     private FacilityRepository $facilityRepository;
     private SerializerInterface $serializer;
     private EntityManagerInterface $em;
+    private FacilityViewModelFactory $viewModelFactory;
 
     public function __construct(
         FacilityRepository $facilityRepository,
         SerializerInterface $serializer,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        FacilityViewModelFactory $viewModelFactory
     )
     {
         $this->facilityRepository = $facilityRepository;
         $this->serializer = $serializer;
         $this->em = $em;
+        $this->viewModelFactory = $viewModelFactory;
     }
 
     /**
@@ -40,41 +44,23 @@ class UpdateFacilityAction extends AbstractRestAction
      */
     public function __invoke(int $id, Request $request): Response
     {
-        $facility = $this->facilityRepository->getById($id);
-        /** @var Facility $facilityRequest */
-        $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
-        $addressRequest = $facilityRequest->address;
+        try {
+            $facility = $this->facilityRepository->getById($id);
+            /** @var Facility $facilityRequest */
+            $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
 
-        $address = $facility->address();
-        $address->updateStreet($addressRequest->street);
-        $address->updateStreetNumber($addressRequest->streetNumber);
-        $address->updateCity($addressRequest->city);
-        $address->updatePostCode($addressRequest->postCode);
+            $facility->updateFacility($facilityRequest->name, $facilityRequest->pitchTypes);
 
-        $facility->updateName($facilityRequest->name);
-        $facility->updatePitchTypes($facilityRequest->pitchTypes);
+            $this->facilityRepository->assertFacilityNameDoesNotExist($facilityRequest->name);
 
+            $this->em->flush();
 
-        $this->facilityRepository->assertFacilityDoesNotExist(
-            $facilityRequest->name,
-            $addressRequest->street,
-            $addressRequest->streetNumber,
-            $addressRequest->postCode);
+            $viewModel = $this->viewModelFactory->create($facility);
 
-        $this->em->flush();
+            return new Response($this->serializer->serialize($viewModel, 'json'));
 
-        $responseAddress = new AddressResponse($address->id(),
-            $addressRequest->street,
-            $addressRequest->streetNumber,
-            $addressRequest->city,
-            $addressRequest->postCode);
-
-        $responseFacility = new FacilityResponse($facility->id(),
-        $facilityRequest->name,
-        $facilityRequest->pitchTypes,
-        $responseAddress,
-        $facility->createdAt());
-
-        return new Response($this->serializer->serialize($responseFacility, 'json'));
+        } catch (ResourceNotFoundException | DuplicateEntityException $exception) {
+            return new Response($exception->getMessage(), 404);
+        }
     }
 }

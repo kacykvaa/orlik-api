@@ -71,8 +71,12 @@ class Facility
         return $this->pitchTypes;
     }
 
-    public function address(): ?Address
+    public function address(): Address
     {
+        if(!$this->address) {
+            throw new \LogicException('Facility must have address');
+        }
+
         return $this->address;
     }
 
@@ -94,13 +98,9 @@ class Facility
         $this->address = $address;
     }
 
-    public function updateName(string $name):void
+    public function updateFacility(string $name, array $pitchTypes)
     {
         $this->name = $name;
-    }
-
-    public function updatePitchTypes(array $pitchTypes): void
-    {
         $this->pitchTypes = $pitchTypes;
     }
 }
