@@ -20,7 +20,11 @@ class GetFacilityAction extends AbstractRestAction
     private FacilityRepository $facilityRepository;
     private FacilityViewModelFactory $viewModelFactory;
 
-    public function __construct(SerializerInterface $serializer, FacilityRepository $facilityRepository, FacilityViewModelFactory $viewModelFactory)
+    public function __construct(
+        SerializerInterface $serializer,
+        FacilityRepository $facilityRepository,
+        FacilityViewModelFactory $viewModelFactory
+    )
     {
         $this->serializer = $serializer;
         $this->facilityRepository = $facilityRepository;
