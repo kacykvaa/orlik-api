@@ -7,8 +7,6 @@ namespace App\UI\Controller;
 
 use App\Application\Repository\FacilityRepository;
 use App\Common\Exception\ResourceNotFoundException;
-use App\UI\Model\Response\Address as AddressResponse;
-use App\UI\Model\Response\Facility as FacilityResponse;
 use App\UI\Model\Response\Factory\FacilityViewModelFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

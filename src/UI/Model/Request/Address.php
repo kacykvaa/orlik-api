@@ -12,17 +12,17 @@ class Address
     /**
      * @Assert\NotNull()
      */
-    public  $street;
+    public string $street;
     /**
      * @Assert\NotNull()
      */
-    public  $streetNumber;
+    public string $streetNumber;
     /**
      * @Assert\NotNull()
      */
-    public  $city;
+    public string $city;
     /**
      * @Assert\NotNull()
      */
-    public  $postCode;
+    public string $postCode;
 }
