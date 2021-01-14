@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Application\Entity;
@@ -71,8 +70,12 @@ class Facility
         return $this->pitchTypes;
     }
 
-    public function address(): ?Address
+    public function address(): Address
     {
+        if(!$this->address) {
+            throw new \LogicException('Facility must have address');
+        }
+
         return $this->address;
     }
 
@@ -84,13 +87,23 @@ class Facility
         return $this->images;
     }
 
-   public function createdAt(): CarbonImmutable
-   {
+    public function createdAt(): CarbonImmutable
+    {
         return $this->createdAt;
     }
 
     public function updateAddress(Address $address): void
     {
         $this->address = $address;
+    }
+
+    public function updateName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function updatePitchTypes(array $pitchTypes)
+    {
+        $this->pitchTypes = $pitchTypes;
     }
 }

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\UI\Controller;
 
-use App\Application\Entity\Address as AddressEntity;
-use App\Application\Entity\Facility as FacilityEntity;
 use App\Application\Repository\FacilityRepository;
-use App\Application\Validator\FacilityValidator;
+use App\Application\Validator\FacilityNameValidator;
+use App\Common\Exception\DuplicateEntityException;
 use App\Common\Exception\ResourceNotFoundException;
 use App\UI\Model\Request\Facility;
 use App\UI\Model\Response\Factory\FacilityViewModelFactory;
@@ -17,65 +16,53 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class CreateFacilityAction extends AbstractRestAction
+class UpdateFacilityAction extends AbstractRestAction
 {
-    private EntityManagerInterface $em;
-    private SerializerInterface $serializer;
     private FacilityRepository $facilityRepository;
+    private SerializerInterface $serializer;
+    private EntityManagerInterface $em;
     private FacilityViewModelFactory $viewModelFactory;
-    private FacilityValidator $facilityValidator;
+    private FacilityNameValidator $facilityValidator;
 
     public function __construct(
-        EntityManagerInterface $em,
-        SerializerInterface $serializer,
         FacilityRepository $facilityRepository,
+        SerializerInterface $serializer,
+        EntityManagerInterface $em,
         FacilityViewModelFactory $viewModelFactory,
-        FacilityValidator $facilityValidator
+        FacilityNameValidator $facilityValidator
     )
     {
-        $this->em = $em;
-        $this->serializer = $serializer;
         $this->facilityRepository = $facilityRepository;
+        $this->serializer = $serializer;
+        $this->em = $em;
         $this->viewModelFactory = $viewModelFactory;
         $this->facilityValidator = $facilityValidator;
     }
 
     /**
-     * @Route("/api/facilities", name="create_facility", methods={"POST"})
+     * @Route("/api/facilities/{id}", name="update_facility", methods={"PUT"})
+     * @param int $id
      * @param Request $request
      * @return Response
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(int $id, Request $request): Response
     {
         try {
+            $facility = $this->facilityRepository->getById($id);
             /** @var Facility $facilityRequest */
             $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
 
-            $requestAddress = $facilityRequest->address;
-            $facility = new FacilityEntity($facilityRequest->name, $facilityRequest->pitchTypes);
-            $address = new AddressEntity(
-                $requestAddress->street,
-                $requestAddress->streetNumber,
-                $requestAddress->city,
-                $requestAddress->postCode,
-                $facility
-            );
-            $facility->updateAddress($address);
+            $facility->updateName($facilityRequest->name);
+            $facility->updatePitchTypes($facilityRequest->pitchTypes);
 
-            $this->facilityValidator->assertFacilityDoesNotExist(
-                $facility->name(),
-                $address->street(),
-                $address->streetNumber(),
-                $address->postCode());
-
-            $this->em->persist($facility);
+            $this->facilityValidator->assertFacilityNameDoesNotExist($facilityRequest->name);
             $this->em->flush();
 
             $viewModel = $this->viewModelFactory->create($facility);
 
             return new Response($this->serializer->serialize($viewModel, 'json'));
 
-        } catch (ResourceNotFoundException $exception) {
+        } catch (ResourceNotFoundException | DuplicateEntityException $exception) {
             return new Response($exception->getMessage(), 404);
         }
     }

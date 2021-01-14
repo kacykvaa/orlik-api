@@ -1,12 +1,10 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Application\Repository;
 
 use App\Application\Entity\Facility;
-use App\Common\Exception\DuplicateEntityException;
 use App\Common\Exception\ResourceNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,9 +25,9 @@ class FacilityRepository extends ServiceEntityRepository
         return $facility;
     }
 
-    public function assertFacilityDoesNotExist(string $name, string $street, string $streetNumber, string $postCode)
+    public function countFacilityByNameAndAddress(string $name, string $street, string $streetNumber, string $postCode): int
     {
-        $count = (int)$this->createQueryBuilder('f')
+        return (int)$this->createQueryBuilder('f')
             ->select('COUNT(f.id)')
             ->leftJoin('f.address', 'a')
             ->orWhere('f.name = :name')
@@ -40,9 +38,15 @@ class FacilityRepository extends ServiceEntityRepository
             ->setParameter('postCode', $postCode)
             ->getQuery()
             ->getSingleScalarResult();
+    }
 
-        if ($count !== 0){
-            throw new DuplicateEntityException('Facility already exists');
-        }
+    public function countFacilityByName(string $name): int
+    {
+        return (int)$this->createQueryBuilder('n')
+            ->select('COUNT(n.id)')
+            ->Where('n.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }
