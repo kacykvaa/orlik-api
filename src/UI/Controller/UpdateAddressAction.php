@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-
 namespace App\UI\Controller;
 
 use App\Application\Repository\AddressRepository;
 use App\Common\Exception\DuplicateEntityException;
 use App\Common\Exception\ResourceNotFoundException;
+use App\Application\Validator\FacilityAddressValidator;
 use App\UI\Model\Request\Address as AddressRequest;
 use App\UI\Model\Response\Factory\AddressViewModelFactory;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,18 +22,21 @@ class UpdateAddressAction extends AbstractRestAction
     private SerializerInterface $serializer;
     private AddressViewModelFactory $viewModelFactory;
     private EntityManagerInterface $em;
+    private FacilityAddressValidator $addressValidator;
 
     public function __construct(
         AddressRepository $addressRepository,
         SerializerInterface $serializer,
         AddressViewModelFactory $viewModelFactory,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        FacilityAddressValidator $addressValidator
     )
     {
         $this->addressRepository = $addressRepository;
         $this->serializer = $serializer;
         $this->viewModelFactory = $viewModelFactory;
         $this->em = $em;
+        $this->addressValidator = $addressValidator;
     }
 
     /**
@@ -49,17 +52,17 @@ class UpdateAddressAction extends AbstractRestAction
             /** @var AddressRequest $addressRequest */
             $addressRequest = $this->serializer->deserialize($request->getContent(), AddressRequest::class, 'json');
 
-            $address->updateAddress(
+            $address->updateData(
                 $addressRequest->street,
                 $addressRequest->streetNumber,
                 $addressRequest->city,
                 $addressRequest->postCode,
             );
-            $this->addressRepository->assertAddressDoestNotExist(
+
+            $this->addressValidator->AssertAddressDataDoesNotExist(
                 $addressRequest->street,
                 $addressRequest->streetNumber,
-                $addressRequest->postCode,
-            );
+                $addressRequest->postCode);
 
             $this->em->flush();
 

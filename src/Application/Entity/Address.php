@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Application\Entity;
@@ -88,7 +87,7 @@ class Address
         return $this->postCode;
     }
 
-    public function updateAddress(string $street, string $streetNumber, string $city, string $postCode)
+    public function updateData(string $street, string $streetNumber, string $city, string $postCode)
     {
         $this->street = $street;
         $this->streetNumber = $streetNumber;

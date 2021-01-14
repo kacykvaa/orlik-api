@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\UI\Controller;
@@ -8,6 +7,7 @@ namespace App\UI\Controller;
 use App\Application\Entity\Address as AddressEntity;
 use App\Application\Entity\Facility as FacilityEntity;
 use App\Application\Repository\FacilityRepository;
+use App\Application\Validator\FacilityValidator;
 use App\Common\Exception\ResourceNotFoundException;
 use App\UI\Model\Request\Facility;
 use App\UI\Model\Response\Factory\FacilityViewModelFactory;
@@ -23,18 +23,21 @@ class CreateFacilityAction extends AbstractRestAction
     private SerializerInterface $serializer;
     private FacilityRepository $facilityRepository;
     private FacilityViewModelFactory $viewModelFactory;
+    private FacilityValidator $facilityValidator;
 
     public function __construct(
         EntityManagerInterface $em,
         SerializerInterface $serializer,
         FacilityRepository $facilityRepository,
-        FacilityViewModelFactory $viewModelFactory
+        FacilityViewModelFactory $viewModelFactory,
+        FacilityValidator $facilityValidator
     )
     {
         $this->em = $em;
         $this->serializer = $serializer;
         $this->facilityRepository = $facilityRepository;
         $this->viewModelFactory = $viewModelFactory;
+        $this->facilityValidator = $facilityValidator;
     }
 
     /**
@@ -59,7 +62,7 @@ class CreateFacilityAction extends AbstractRestAction
             );
             $facility->updateAddress($address);
 
-            $this->facilityRepository->assertFacilityDoesNotExist(
+            $this->facilityValidator->assertFacilityDoesNotExist(
                 $facility->name(),
                 $address->street(),
                 $address->streetNumber(),

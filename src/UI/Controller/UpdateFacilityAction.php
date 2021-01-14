@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-
 namespace App\UI\Controller;
 
 use App\Application\Repository\FacilityRepository;
+use App\Application\Validator\FacilityNameValidator;
 use App\Common\Exception\DuplicateEntityException;
 use App\Common\Exception\ResourceNotFoundException;
 use App\UI\Model\Request\Facility;
@@ -22,18 +22,21 @@ class UpdateFacilityAction extends AbstractRestAction
     private SerializerInterface $serializer;
     private EntityManagerInterface $em;
     private FacilityViewModelFactory $viewModelFactory;
+    private FacilityNameValidator $facilityValidator;
 
     public function __construct(
         FacilityRepository $facilityRepository,
         SerializerInterface $serializer,
         EntityManagerInterface $em,
-        FacilityViewModelFactory $viewModelFactory
+        FacilityViewModelFactory $viewModelFactory,
+        FacilityNameValidator $facilityValidator
     )
     {
         $this->facilityRepository = $facilityRepository;
         $this->serializer = $serializer;
         $this->em = $em;
         $this->viewModelFactory = $viewModelFactory;
+        $this->facilityValidator = $facilityValidator;
     }
 
     /**
@@ -49,10 +52,10 @@ class UpdateFacilityAction extends AbstractRestAction
             /** @var Facility $facilityRequest */
             $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
 
-            $facility->updateFacility($facilityRequest->name, $facilityRequest->pitchTypes);
+            $facility->updateName($facilityRequest->name);
+            $facility->updatePitchTypes($facilityRequest->pitchTypes);
 
-            $this->facilityRepository->assertFacilityNameDoesNotExist($facilityRequest->name);
-
+            $this->facilityValidator->assertFacilityNameDoesNotExist($facilityRequest->name);
             $this->em->flush();
 
             $viewModel = $this->viewModelFactory->create($facility);

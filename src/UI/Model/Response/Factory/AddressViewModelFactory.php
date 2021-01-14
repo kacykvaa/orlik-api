@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\UI\Model\Response\Factory;
-
 
 use App\Application\Entity\Address as AddressEntity;
 use App\UI\Model\Response\Address;

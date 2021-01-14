@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Application\Entity;
@@ -98,9 +97,13 @@ class Facility
         $this->address = $address;
     }
 
-    public function updateFacility(string $name, array $pitchTypes)
+    public function updateName(string $name)
     {
         $this->name = $name;
+    }
+
+    public function updatePitchTypes(array $pitchTypes)
+    {
         $this->pitchTypes = $pitchTypes;
     }
 }
