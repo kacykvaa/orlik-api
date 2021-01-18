@@ -9,19 +9,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Address
 {
     /**
+     * @Assert\NotBlank()
      * @Assert\NotNull()
+     * @Assert\Type(type="string")
      */
-    public string $street;
+    public  $street;
     /**
+     * @Assert\NotBlank()
      * @Assert\NotNull()
      */
-    public string $streetNumber;
+    public $streetNumber;
     /**
+     * @Assert\NotBlank
      * @Assert\NotNull()
      */
-    public string $city;
+    public $city;
     /**
+     * @Assert\NotBlank
      * @Assert\NotNull()
      */
-    public string $postCode;
+    public $postCode;
 }
