@@ -6,9 +6,8 @@ namespace App\Application\Validator;
 
 use App\Application\Repository\FacilityRepository;
 use App\Common\Exception\DuplicateEntityException;
-use App\UI\Controller\AbstractRestAction;
 
-class FacilityNameValidator extends AbstractRestAction
+class FacilityNameValidator
 {
     private FacilityRepository $repository;
 
