@@ -67,11 +67,6 @@ class UpdateAddressAction extends AbstractRestAction
                 $addressRequest->postCode,
             );
 
-            $this->addressValidator->AssertAddressDataDoesNotExist(
-                $addressRequest->street,
-                $addressRequest->streetNumber,
-                $addressRequest->postCode);
-
             $this->em->flush();
 
             $viewModel = $this->viewModelFactory->create($address);

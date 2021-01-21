@@ -6,7 +6,6 @@ namespace App\UI\Controller;
 
 use App\Application\Entity\Address as AddressEntity;
 use App\Application\Entity\Facility as FacilityEntity;
-use App\Application\Repository\FacilityRepository;
 use App\Common\Exception\ResourceNotFoundException;
 use App\Common\UI\Request\Validator\RequestViewModelValidator;
 use App\UI\Model\Request\Facility;
@@ -21,21 +20,18 @@ use Symfony\Component\Serializer\SerializerInterface;
 class CreateFacilityAction extends AbstractRestAction
 {
     private EntityManagerInterface $em;
-    private FacilityRepository $facilityRepository;
     private FacilityViewModelFactory $viewModelFactory;
 
     public function __construct(
         SerializerInterface $serializer,
         RequestViewModelValidator $requestViewModelValidator,
         EntityManagerInterface $em,
-        FacilityRepository $facilityRepository,
         FacilityViewModelFactory $viewModelFactory
     )
     {
       parent::__construct($serializer, $requestViewModelValidator);
         $this->requestViewModelValidator = $requestViewModelValidator;
         $this->em = $em;
-        $this->facilityRepository = $facilityRepository;
         $this->viewModelFactory = $viewModelFactory;
     }
 

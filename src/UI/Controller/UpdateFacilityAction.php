@@ -63,7 +63,6 @@ class UpdateFacilityAction extends AbstractRestAction
             $facility->updateName($facilityRequest->name);
             $facility->updatePitchTypes($facilityRequest->pitchTypes);
 
-            $this->facilityValidator->assertFacilityNameDoesNotExist($facilityRequest->name);
             $this->em->flush();
 
             $viewModel = $this->viewModelFactory->create($facility);

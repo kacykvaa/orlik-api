@@ -28,13 +28,10 @@ class UniqueFacilityNameValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, UniqueFacilityName::class);
         }
 
-        if (null === $value || '' === $value) {
-            return;
-        }
+        if (null === $value || '' === $value) return;
 
-        if (!is_string($value)) {
-            throw new UnexpectedValueException($value, 'string');
-        }
+        if (!is_string($value)) throw new UnexpectedValueException($value, 'string');
+
         $query = $this->repository->countFacilityByName($value);
 
         if ($query !== 0) {
