@@ -8,6 +8,7 @@ use App\Application\Repository\FacilityRepository;
 use App\Application\Validator\FacilityNameValidator;
 use App\Common\Exception\DuplicateEntityException;
 use App\Common\Exception\ResourceNotFoundException;
+use App\Common\UI\Request\Validator\RequestViewModelValidator;
 use App\UI\Model\Request\Facility;
 use App\UI\Model\Response\Factory\FacilityViewModelFactory;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,19 +20,20 @@ use Symfony\Component\Serializer\SerializerInterface;
 class UpdateFacilityAction extends AbstractRestAction
 {
     private FacilityRepository $facilityRepository;
-    private SerializerInterface $serializer;
     private EntityManagerInterface $em;
     private FacilityViewModelFactory $viewModelFactory;
     private FacilityNameValidator $facilityValidator;
 
     public function __construct(
-        FacilityRepository $facilityRepository,
         SerializerInterface $serializer,
+        RequestViewModelValidator $requestViewModelValidator,
+        FacilityRepository $facilityRepository,
         EntityManagerInterface $em,
         FacilityViewModelFactory $viewModelFactory,
         FacilityNameValidator $facilityValidator
     )
     {
+        parent::__construct($serializer, $requestViewModelValidator);
         $this->facilityRepository = $facilityRepository;
         $this->serializer = $serializer;
         $this->em = $em;
@@ -52,10 +54,12 @@ class UpdateFacilityAction extends AbstractRestAction
             /** @var Facility $facilityRequest */
             $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
 
+            $validationErrors = $this->requestViewModelValidator->validate($facilityRequest);
+            if($validationErrors) return $this->ValidationResponse($validationErrors);
+
             $facility->updateName($facilityRequest->name);
             $facility->updatePitchTypes($facilityRequest->pitchTypes);
 
-            $this->facilityValidator->assertFacilityNameDoesNotExist($facilityRequest->name);
             $this->em->flush();
 
             $viewModel = $this->viewModelFactory->create($facility);

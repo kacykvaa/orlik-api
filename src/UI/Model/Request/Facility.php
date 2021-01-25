@@ -10,7 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Facility
 {
     /**
-     * @Assert\NotBlank(message="You need to pass a name")
+     * @Assert\Length(min=2)
+     * @Assert\NotBlank()
      * @Assert\NotNull()
      */
     public string $name;
@@ -22,7 +23,7 @@ class Facility
     public array $pitchTypes = [];
     /**
      * @var mixed|Address
-     * @Assert\NotNull()
+     * @Assert\Valid()
      */
     public $address;
 

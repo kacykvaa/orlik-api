@@ -6,9 +6,8 @@ namespace App\Application\Validator;
 
 use App\Application\Repository\AddressRepository;
 use App\Common\Exception\DuplicateEntityException;
-use App\UI\Controller\AbstractRestAction;
 
-class FacilityAddressValidator extends AbstractRestAction
+class FacilityAddressValidator
 {
     private AddressRepository $repository;
 
@@ -19,7 +18,7 @@ class FacilityAddressValidator extends AbstractRestAction
 
     public function AssertAddressDataDoesNotExist(string $street, string $streetNumber, string $postCode)
     {
-        $count = $this->repository->countAddressByStreetNumberAndZip($street, $streetNumber, $postCode);
+        $count = $this->repository->countAddressByStreetNumberAndCity($street, $streetNumber, $postCode);
 
         if ($count !== 0) {
             throw new DuplicateEntityException('Address already exists');
