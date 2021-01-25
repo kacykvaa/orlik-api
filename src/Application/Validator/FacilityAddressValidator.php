@@ -18,7 +18,7 @@ class FacilityAddressValidator
 
     public function AssertAddressDataDoesNotExist(string $street, string $streetNumber, string $postCode)
     {
-        $count = $this->repository->countAddressByStreetNumberAndZip($street, $streetNumber, $postCode);
+        $count = $this->repository->countAddressByStreetNumberAndCity($street, $streetNumber, $postCode);
 
         if ($count !== 0) {
             throw new DuplicateEntityException('Address already exists');

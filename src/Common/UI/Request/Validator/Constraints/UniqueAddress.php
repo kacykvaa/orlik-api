@@ -11,11 +11,11 @@ use Symfony\Component\Validator\Constraint;
  */
 class UniqueAddress extends Constraint
 {
-   public string $message = "Address already exists!";
+   public string $message = "Facility with the given street and city already exists!";
 
     public function validatedBy(): string
     {
-        return get_class($this) . 'Validator';
+        return UniqueAddressValidator::class;
     }
 
     public function getTargets()

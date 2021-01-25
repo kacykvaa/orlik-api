@@ -24,11 +24,9 @@ class UniqueFacilityNameValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof UniqueFacilityName) {
-            throw new UnexpectedTypeException($constraint, UniqueFacilityName::class);
-        }
-
-        if (null === $value || '' === $value) return;
+        if (!$constraint instanceof UniqueFacilityName) throw new UnexpectedTypeException(
+            $constraint, UniqueFacilityName::class
+        );
 
         if (!is_string($value)) throw new UnexpectedValueException($value, 'string');
 

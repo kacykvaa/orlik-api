@@ -15,6 +15,6 @@ class UniqueFacilityName extends Constraint
 
     public function validatedBy(): string
     {
-        return get_class($this) . 'Validator';
+        return UniqueFacilityNameValidator::class;
     }
 }

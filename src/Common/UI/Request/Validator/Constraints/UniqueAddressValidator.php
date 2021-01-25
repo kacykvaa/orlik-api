@@ -22,15 +22,15 @@ class UniqueAddressValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint): void
     {
-        $query = $this->repository->countAddressByStreetNumberAndZip(
+        $query = $this->repository->countAddressByStreetNumberAndCity(
             $value->street,
             $value->streetNumber,
-            $value->postCode,
+            $value->city,
         );
 
         if ($query !== 0){
             $this->context->buildViolation($constraint->message)
-                ->atPath('Address')
+                ->atPath('address')
                 ->addViolation();
         }
     }

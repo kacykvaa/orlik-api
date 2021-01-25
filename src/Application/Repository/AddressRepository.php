@@ -25,14 +25,14 @@ class AddressRepository extends ServiceEntityRepository
         return $address;
     }
 
-    public function countAddressByStreetNumberAndZip(string $street, string $streetNumber, string $postCode): int
+    public function countAddressByStreetNumberAndCity(string $street, string $streetNumber, string $city): int
     {
         return (int)$this->createQueryBuilder('a')
             ->select('COUNT(a.id)')
-            ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.postCode = :postCode')
+            ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.city = :city')
             ->setParameter('street', $street)
             ->setParameter('streetNumber', $streetNumber)
-            ->setParameter('postCode', $postCode)
+            ->setParameter('city', $city)
             ->getQuery()
             ->getSingleScalarResult();
     }
