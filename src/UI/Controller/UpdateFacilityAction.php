@@ -12,7 +12,6 @@ use App\Common\UI\Request\Validator\RequestViewModelValidator;
 use App\UI\Model\Request\Facility;
 use App\UI\Model\Response\Factory\FacilityViewModelFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,9 +55,7 @@ class UpdateFacilityAction extends AbstractRestAction
             $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
 
             $validationErrors = $this->requestViewModelValidator->validate($facilityRequest);
-            if ($validationErrors) {
-                return new JsonResponse($validationErrors, Response::HTTP_BAD_REQUEST);
-            }
+            if($validationErrors) return $this->ValidationResponse($validationErrors);
 
             $facility->updateName($facilityRequest->name);
             $facility->updatePitchTypes($facilityRequest->pitchTypes);

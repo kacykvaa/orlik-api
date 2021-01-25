@@ -28,9 +28,20 @@ class UniqueAddressValidator extends ConstraintValidator
             $value->city,
         );
 
-        if ($query !== 0){
-            $this->context->buildViolation($constraint->message)
-                ->atPath('address')
+        if ($query !== 0) {
+            $this->context
+                ->buildViolation($constraint->message)
+                ->atPath('street')
+                ->addViolation();
+
+            $this->context
+                ->buildViolation($constraint->message)
+                ->atPath('streetNumber')
+                ->addViolation();
+
+            $this->context
+                ->buildViolation($constraint->message)
+                ->atPath('city')
                 ->addViolation();
         }
     }

@@ -12,7 +12,6 @@ use App\Common\UI\Request\Validator\RequestViewModelValidator;
 use App\UI\Model\Request\Address as AddressRequest;
 use App\UI\Model\Response\Factory\AddressViewModelFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,9 +55,7 @@ class UpdateAddressAction extends AbstractRestAction
             $addressRequest = $this->serializer->deserialize($request->getContent(), AddressRequest::class, 'json');
 
             $validationErrors = $this->requestViewModelValidator->validate($addressRequest);
-            if ($validationErrors) {
-                return new JsonResponse($validationErrors, Response::HTTP_BAD_REQUEST);
-            }
+            if($validationErrors) return $this->ValidationResponse($validationErrors);
 
             $address->updateData(
                 $addressRequest->street,

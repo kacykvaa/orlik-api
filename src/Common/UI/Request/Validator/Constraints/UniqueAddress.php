@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class UniqueAddress extends Constraint
 {
-   public string $message = "Facility with the given street and city already exists!";
+   public string $message = "Facility exists under same address";
 
     public function validatedBy(): string
     {
