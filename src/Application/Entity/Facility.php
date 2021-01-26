@@ -47,6 +47,16 @@ class Facility
      */
     private CarbonImmutable $createdAt;
 
+    /**
+     * @ORM\Column (type="integer")
+     */
+    private int $deleted = 0;
+
+    /**
+     * @ORM\Column (type="carbon_immutable", nullable=true)
+     */
+    private CarbonImmutable $deletedAt;
+
     public function __construct(string $name, array $pitchTypes)
     {
         $this->name = $name;
@@ -72,7 +82,7 @@ class Facility
 
     public function address(): Address
     {
-        if(!$this->address) {
+        if (!$this->address) {
             throw new \LogicException('Facility must have address');
         }
 
@@ -92,17 +102,27 @@ class Facility
         return $this->createdAt;
     }
 
+    public function updateDeleted(int $deleted)
+    {
+        $this->deleted = $deleted;
+    }
+
+    public function updateDeletedAt(): void
+    {
+        $this->deletedAt = new CarbonImmutable();
+    }
+
     public function updateAddress(Address $address): void
     {
         $this->address = $address;
     }
 
-    public function updateName(string $name)
+    public function updateName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function updatePitchTypes(array $pitchTypes)
+    public function updatePitchTypes(array $pitchTypes): void
     {
         $this->pitchTypes = $pitchTypes;
     }

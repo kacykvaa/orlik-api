@@ -16,9 +16,15 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
-    public function getById(int $id): Address
+    public function getAddressById(int $id): Address
     {
-        $address = $this->find($id);
+        $address = $this->createQueryBuilder('a')
+            ->leftJoin('a.facility', 'f')
+            ->orWhere('a.id = :id AND f.deleted = 0')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+
         if (!$address) {
             throw new ResourceNotFoundException('Address not found');
         }
@@ -29,7 +35,8 @@ class AddressRepository extends ServiceEntityRepository
     {
         return (int)$this->createQueryBuilder('a')
             ->select('COUNT(a.id)')
-            ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.city = :city')
+            ->leftJoin('a.facility', 'f')
+            ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.city = :city AND f.deleted = 0')
             ->setParameter('street', $street)
             ->setParameter('streetNumber', $streetNumber)
             ->setParameter('city', $city)
