@@ -9,6 +9,7 @@ use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 
 /**
  * @ORM\Entity(repositoryClass=FacilityRepository::class)
@@ -83,7 +84,7 @@ class Facility
     public function address(): Address
     {
         if (!$this->address) {
-            throw new \LogicException('Facility must have address');
+            throw new LogicException('Facility must have address');
         }
 
         return $this->address;
@@ -102,9 +103,9 @@ class Facility
         return $this->createdAt;
     }
 
-    public function updateDeleted(int $deleted)
+    public function updateDeleted(): void
     {
-        $this->deleted = $deleted;
+        $this->deleted = 1;
     }
 
     public function updateDeletedAt(): void
