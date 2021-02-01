@@ -50,7 +50,7 @@ class UpdateFacilityAction extends AbstractRestAction
     public function __invoke(int $id, Request $request): Response
     {
         try {
-            $facility = $this->facilityRepository->getFacilityById($id);
+            $facility = $this->facilityRepository->getById($id);
             /** @var Facility $facilityRequest */
             $facilityRequest = $this->serializer->deserialize($request->getContent(), Facility::class, 'json');
 

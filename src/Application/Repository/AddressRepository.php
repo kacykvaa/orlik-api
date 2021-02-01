@@ -16,11 +16,11 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
-    public function getAddressById(int $id): Address
+    public function getById(int $id): Address
     {
         $address = $this->createQueryBuilder('a')
             ->leftJoin('a.facility', 'f')
-            ->orWhere('a.id = :id AND f.deleted = 0')
+            ->orWhere('a.id = :id AND f.deleted = false')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
@@ -36,7 +36,7 @@ class AddressRepository extends ServiceEntityRepository
         return (int)$this->createQueryBuilder('a')
             ->select('COUNT(a.id)')
             ->leftJoin('a.facility', 'f')
-            ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.city = :city AND f.deleted = 0')
+            ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.city = :city AND f.deleted = false')
             ->setParameter('street', $street)
             ->setParameter('streetNumber', $streetNumber)
             ->setParameter('city', $city)

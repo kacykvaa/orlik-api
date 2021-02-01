@@ -10,9 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use LogicException;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
- * @ORM\Entity(repositoryClass=FacilityRepository::class)
+ * @ORM\Entity(repositoryClass="App\Application\Repository\FacilityRepository", repositoryClass=FacilityRepository::class)
  */
 class Facility
 {
@@ -49,9 +50,9 @@ class Facility
     private CarbonImmutable $createdAt;
 
     /**
-     * @ORM\Column (type="integer")
+     * @ORM\Column (type="boolean")
      */
-    private int $deleted = 0;
+    private bool $deleted = false;
 
     /**
      * @ORM\Column (type="carbon_immutable", nullable=true)
@@ -103,13 +104,9 @@ class Facility
         return $this->createdAt;
     }
 
-    public function updateDeleted(): void
+    public function delete(): void
     {
-        $this->deleted = 1;
-    }
-
-    public function updateDeletedAt(): void
-    {
+        $this->deleted = true;
         $this->deletedAt = new CarbonImmutable();
     }
 

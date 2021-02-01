@@ -38,7 +38,7 @@ class GetFacilityAction extends AbstractRestAction
     public function __invoke(int $id): Response
     {
         try {
-            $facility = $this->facilityRepository->getFacilityById($id);
+            $facility = $this->facilityRepository->getById($id);
 
             $viewModel = $this->viewModelFactory->create($facility);
 

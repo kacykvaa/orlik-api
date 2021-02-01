@@ -37,13 +37,12 @@ class DeleteFacilityAction extends AbstractRestAction
      */
     public function __invoke(int $id): Response
     {
-        $facility = $this->facilityRepository->getFacilityById($id);
+        $facility = $this->facilityRepository->getById($id);
 
-        $facility->updateDeleted();
-        $facility->updateDeletedAt();
+        $facility->delete();
 
         $this->em->flush();
 
-        return new Response(null, 204);
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 }

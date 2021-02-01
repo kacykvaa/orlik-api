@@ -50,7 +50,7 @@ class UpdateAddressAction extends AbstractRestAction
     public function __invoke(int $id, Request $request): Response
     {
         try {
-            $address = $this->addressRepository->getAddressById($id);
+            $address = $this->addressRepository->getById($id);
             /** @var AddressRequest $addressRequest */
             $addressRequest = $this->serializer->deserialize($request->getContent(), AddressRequest::class, 'json');
 

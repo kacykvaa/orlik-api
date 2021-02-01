@@ -16,10 +16,10 @@ class FacilityRepository extends ServiceEntityRepository
         parent::__construct($registry, Facility::class);
     }
 
-    public function getFacilityById(int $id): Facility
+    public function getById(int $id): Facility
     {
         $facility = $this->createQueryBuilder('a')
-            ->orWhere('a.id = :id AND a.deleted = 0')
+            ->orWhere('a.id = :id AND a.deleted = false')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
@@ -35,7 +35,7 @@ class FacilityRepository extends ServiceEntityRepository
         return (int)$this->createQueryBuilder('f')
             ->select('COUNT(f.id)')
             ->leftJoin('f.address', 'a')
-            ->orWhere('f.deleted = 0')
+            ->orWhere('f.deleted = false')
             ->orWhere('f.name = :name')
             ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.postCode = :postCode')
             ->setParameter('name', $name)
