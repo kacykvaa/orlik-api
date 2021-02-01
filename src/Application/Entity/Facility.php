@@ -9,9 +9,11 @@ use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
- * @ORM\Entity(repositoryClass=FacilityRepository::class)
+ * @ORM\Entity(repositoryClass="App\Application\Repository\FacilityRepository", repositoryClass=FacilityRepository::class)
  */
 class Facility
 {
@@ -47,6 +49,16 @@ class Facility
      */
     private CarbonImmutable $createdAt;
 
+    /**
+     * @ORM\Column (type="boolean")
+     */
+    private bool $deleted = false;
+
+    /**
+     * @ORM\Column (type="carbon_immutable", nullable=true)
+     */
+    private CarbonImmutable $deletedAt;
+
     public function __construct(string $name, array $pitchTypes)
     {
         $this->name = $name;
@@ -72,8 +84,8 @@ class Facility
 
     public function address(): Address
     {
-        if(!$this->address) {
-            throw new \LogicException('Facility must have address');
+        if (!$this->address) {
+            throw new LogicException('Facility must have address');
         }
 
         return $this->address;
@@ -92,17 +104,23 @@ class Facility
         return $this->createdAt;
     }
 
+    public function delete(): void
+    {
+        $this->deleted = true;
+        $this->deletedAt = new CarbonImmutable();
+    }
+
     public function updateAddress(Address $address): void
     {
         $this->address = $address;
     }
 
-    public function updateName(string $name)
+    public function updateName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function updatePitchTypes(array $pitchTypes)
+    public function updatePitchTypes(array $pitchTypes): void
     {
         $this->pitchTypes = $pitchTypes;
     }

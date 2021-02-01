@@ -27,4 +27,5 @@ class Facility
      */
     public $address;
 
+    public int $deleted;
 }
