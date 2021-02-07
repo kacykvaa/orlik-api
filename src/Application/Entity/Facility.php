@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use LogicException;
-use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @ORM\Entity(repositoryClass="App\Application\Repository\FacilityRepository", repositoryClass=FacilityRepository::class)
@@ -59,12 +58,18 @@ class Facility
      */
     private CarbonImmutable $deletedAt;
 
+    /**
+     * @ORM\Column (type="string")
+     */
+    private string $nameToSearch;
+
     public function __construct(string $name, array $pitchTypes)
     {
         $this->name = $name;
         $this->pitchTypes = $pitchTypes;
         $this->images = new ArrayCollection();
         $this->createdAt = new CarbonImmutable();
+        $this->nameToSearch = str_replace(' ','', mb_strtolower($name));
     }
 
     public function id(): ?int
@@ -103,7 +108,7 @@ class Facility
     {
         return $this->createdAt;
     }
-
+    
     public function delete(): void
     {
         $this->deleted = true;
@@ -118,6 +123,7 @@ class Facility
     public function updateName(string $name): void
     {
         $this->name = $name;
+        $this->nameToSearch = str_replace(' ','', mb_strtolower($name));
     }
 
     public function updatePitchTypes(array $pitchTypes): void

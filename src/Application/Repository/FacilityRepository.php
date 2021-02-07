@@ -6,6 +6,7 @@ namespace App\Application\Repository;
 
 use App\Application\Entity\Facility;
 use App\Common\Exception\ResourceNotFoundException;
+use App\Common\Filters\Filters;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -35,9 +36,9 @@ class FacilityRepository extends ServiceEntityRepository
         return (int)$this->createQueryBuilder('f')
             ->select('COUNT(f.id)')
             ->leftJoin('f.address', 'a')
-            ->orWhere('f.deleted = false')
             ->orWhere('f.name = :name')
             ->orWhere('a.street = :street AND a.streetNumber = :streetNumber AND a.postCode = :postCode')
+            ->AndWhere('f.deleted = false')
             ->setParameter('name', $name)
             ->setParameter('street', $street)
             ->setParameter('streetNumber', $streetNumber)
@@ -54,5 +55,24 @@ class FacilityRepository extends ServiceEntityRepository
             ->setParameter('name', $name)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    public function FindFacilities(Filters $filters): array
+    {
+        $query = $this->createQueryBuilder('n');
+
+        if (array_key_exists('name', $filters->filters)) {
+            $nameToSearch = str_replace(' ', '', mb_strtolower($filters->filters['name']));
+            $query->orWhere('n.nameToSearch LIKE :nameToSearch')
+                ->setParameter('nameToSearch', '%'.$nameToSearch.'%');
+        }
+
+       if (array_key_exists('pitchTypes', $filters->filters)){
+           $pitchTypes = $filters->filters['pitchTypes'];
+           $query->orWhere('n.pitchTypes IN (:pitchTypes)')
+           ->setParameter('pitchTypes', $pitchTypes);
+        }
+        $query->andWhere('n.deleted = false');
+       return $query->getQuery()->getResult();
     }
 }
