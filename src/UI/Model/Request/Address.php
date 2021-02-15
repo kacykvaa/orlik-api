@@ -17,17 +17,20 @@ class Address
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      */
-    public  $street;
+    public $street;
+
     /**
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */
     public $streetNumber;
+
     /**
      * @Assert\NotBlank
      * @Assert\NotNull()
      */
     public $city;
+
     /**
      * @Assert\NotBlank
      * @Assert\NotNull()

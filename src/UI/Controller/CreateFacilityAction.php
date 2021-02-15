@@ -6,9 +6,12 @@ namespace App\UI\Controller;
 
 use App\Application\Entity\Address as AddressEntity;
 use App\Application\Entity\Facility as FacilityEntity;
+use App\Application\Entity\FacilityPitchType;
+use App\Application\Repository\PitchTypeRepository;
 use App\Common\Exception\ResourceNotFoundException;
 use App\Common\UI\Request\Validator\RequestViewModelValidator;
 use App\UI\Model\Request\Facility;
+use App\UI\Model\Response\Factory\PitchTypeViewModelFactory;
 use App\UI\Model\Response\Factory\FacilityViewModelFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,19 +22,25 @@ use Symfony\Component\Serializer\SerializerInterface;
 class CreateFacilityAction extends AbstractRestAction
 {
     private EntityManagerInterface $em;
-    private FacilityViewModelFactory $viewModelFactory;
+    private PitchTypeRepository $pitchTypeRepository;
+    private FacilityViewModelFactory $facilityViewModelFactory;
+    private PitchTypeViewModelFactory $pitchTypeViewModelFactory;
 
     public function __construct(
         SerializerInterface $serializer,
         RequestViewModelValidator $requestViewModelValidator,
         EntityManagerInterface $em,
-        FacilityViewModelFactory $viewModelFactory
+        PitchTypeRepository $pitchTypeRepository,
+        FacilityViewModelFactory $facilityViewModelFactory,
+        PitchTypeViewModelFactory $pitchTypeViewModelFactory
     )
     {
-      parent::__construct($serializer, $requestViewModelValidator);
+        parent::__construct($serializer, $requestViewModelValidator);
         $this->requestViewModelValidator = $requestViewModelValidator;
         $this->em = $em;
-        $this->viewModelFactory = $viewModelFactory;
+        $this->pitchTypeRepository = $pitchTypeRepository;
+        $this->facilityViewModelFactory = $facilityViewModelFactory;
+        $this->pitchTypeViewModelFactory = $pitchTypeViewModelFactory;
     }
 
     /**
@@ -47,9 +56,9 @@ class CreateFacilityAction extends AbstractRestAction
             $requestAddress = $facilityRequest->address;
 
             $validationErrors = $this->requestViewModelValidator->validate($facilityRequest);
-            if($validationErrors) return $this->ValidationResponse($validationErrors);
+            if ($validationErrors) return $this->ValidationResponse($validationErrors);
 
-            $facility = new FacilityEntity($facilityRequest->name, $facilityRequest->pitchTypes);
+            $facility = new FacilityEntity($facilityRequest->name);
             $address = new AddressEntity(
                 $requestAddress->street,
                 $requestAddress->streetNumber,
@@ -59,10 +68,24 @@ class CreateFacilityAction extends AbstractRestAction
             );
             $facility->updateAddress($address);
 
+            $pitchTypes = array_column($facilityRequest->pitchType, 'id');
+            $facilityPitchTypes = [];
+
+            foreach ($pitchTypes as $value) {
+                $pitchType = $this->pitchTypeRepository->getById($value);
+                $facilityPitchTypes[] = new FacilityPitchType(true, $facility, $pitchType);
+            }
+            foreach ($facilityPitchTypes as $value) $this->em->persist($value);
+
             $this->em->persist($facility);
             $this->em->flush();
 
-            $viewModel = $this->viewModelFactory->create($facility);
+            $facilityPitchTypesViewModel=[];
+
+            foreach ($facilityPitchTypes as $value){
+                $facilityPitchTypesViewModel[] = $this->pitchTypeViewModelFactory->create($value);
+            }
+            $viewModel = [$this->facilityViewModelFactory->create($facility), $facilityPitchTypesViewModel];
 
             return new Response($this->serializer->serialize($viewModel, 'json'));
 

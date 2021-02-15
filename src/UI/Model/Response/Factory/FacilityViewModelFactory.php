@@ -11,7 +11,9 @@ class FacilityViewModelFactory
 {
     private AddressViewModelFactory $addressViewModelFactory;
 
-    public function __construct(AddressViewModelFactory $addressViewModelFactory)
+    public function __construct(
+        AddressViewModelFactory $addressViewModelFactory
+    )
     {
         $this->addressViewModelFactory = $addressViewModelFactory;
     }
@@ -24,9 +26,8 @@ class FacilityViewModelFactory
         return new Facility(
             $facility->id(),
             $facility->name(),
-            $facility->pitchTypes(),
             $addressViewModel,
-            $facility->createdAt(),
+            $facility->createdAt()
         );
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Entity;
 
 use App\Application\Repository\ImageRepository;
+use App\Common\Doctrine\GeneratedIdColumn;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,12 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Image
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private int $id;
+    use GeneratedIdColumn;
 
     /**
      * @ORM\Column(type="string", length=255)

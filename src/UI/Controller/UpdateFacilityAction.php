@@ -58,7 +58,6 @@ class UpdateFacilityAction extends AbstractRestAction
             if($validationErrors) return $this->ValidationResponse($validationErrors);
 
             $facility->updateName($facilityRequest->name);
-            $facility->updatePitchTypes($facilityRequest->pitchTypes);
 
             $this->em->flush();
 
