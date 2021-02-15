@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\UI\Model\Request;
 
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Facility
@@ -15,12 +14,7 @@ class Facility
      * @Assert\NotNull()
      */
     public string $name;
-    /**
-     * @Assert\NotNull()
-     * @Assert\NotBlank
-     * @ORM\Column(type="array")
-     */
-    public array $pitchTypes = [];
+
     /**
      * @var mixed|Address
      * @Assert\Valid()
@@ -28,4 +22,9 @@ class Facility
     public $address;
 
     public int $deleted;
+
+    /**
+     * @var array|PitchType
+     */
+    public $pitchType;
 }

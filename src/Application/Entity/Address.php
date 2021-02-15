@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Entity;
 
 use App\Application\Repository\AddressRepository;
+use App\Common\Doctrine\GeneratedIdColumn;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,12 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Address
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private int $id;
+    use GeneratedIdColumn;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -62,27 +58,22 @@ class Address
         $this->facility = $facility;
     }
 
-    public function id(): ?int
-    {
-        return $this->id;
-    }
-
-    public function street(): ?string
+    public function street(): string
     {
         return $this->street;
     }
 
-    public function streetNumber(): ?string
+    public function streetNumber(): string
     {
         return $this->streetNumber;
     }
 
-    public function city(): ?string
+    public function city(): string
     {
         return $this->city;
     }
 
-    public function postCode(): ?string
+    public function postCode(): string
     {
         return $this->postCode;
     }

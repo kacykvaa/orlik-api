@@ -6,9 +6,10 @@ namespace App\UI\Controller;
 
 use App\Application\Repository\FacilityRepository;
 use App\Common\Exception\ResourceNotFoundException;
+use App\Common\Pagerfanta\PaginateSearchResult;
 use App\Common\UI\Request\Validator\RequestViewModelValidator;
 use App\UI\Model\Request\Factory\FacilityFiltersFactory;
-use App\UI\Model\Response\Factory\FacilityViewModelFactory;
+use App\UI\Model\Response\Factory\FacilityPitchTypeViewModelFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,23 +18,23 @@ use Symfony\Component\Serializer\SerializerInterface;
 class GetFacilitiesAction extends AbstractRestAction
 {
     private FacilityRepository $repository;
-    private FacilityViewModelFactory $viewModelFactory;
     private FacilityFiltersFactory $filtersFactory;
+    private FacilityPitchTypeViewModelFactory $viewModelFactory;
 
     public function __construct(
         SerializerInterface $serializer,
         RequestViewModelValidator $requestViewModelValidator,
         FacilityRepository $repository,
-        FacilityViewModelFactory $viewModelFactory,
-        FacilityFiltersFactory $filtersFactory
+        FacilityFiltersFactory $filtersFactory,
+        FacilityPitchTypeViewModelFactory $viewModelFactory
     )
     {
         parent::__construct($serializer, $requestViewModelValidator);
         $this->serializer = $serializer;
         $this->requestViewModelValidator = $requestViewModelValidator;
         $this->repository = $repository;
-        $this->viewModelFactory = $viewModelFactory;
         $this->filtersFactory = $filtersFactory;
+        $this->viewModelFactory = $viewModelFactory;
     }
 
     /**
@@ -45,11 +46,15 @@ class GetFacilitiesAction extends AbstractRestAction
     {
         try {
             $filters = $this->filtersFactory->create($request);
-            $query = $this->repository->FindFacilities($filters);
+            $query = $this->repository->findFacilities($filters);
+
             $facilities = [];
+
             foreach ($query as $value) $facilities[] = $this->viewModelFactory->create($value);
 
-            return new Response($this->serializer->serialize($facilities, 'json'));
+            $paginateResult = new PaginateSearchResult($query, $facilities);
+
+            return new Response($this->serializer->serialize($paginateResult, 'json'));
 
         } catch (ResourceNotFoundException $exception) {
             return new Response($exception->getMessage(), 404);
